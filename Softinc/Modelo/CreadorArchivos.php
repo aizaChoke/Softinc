@@ -33,7 +33,7 @@ class CreadorArchivos {
     function subir($archivo,$nombreArchivoServidor,$nombreRescatado){
          include("../modelo/cnx.php");
         $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
-        session_start();
+     //   session_start();
 
             $formatPermitido=array("pdf");// solo estos formatos soportara el sistema
             $nombreArchivo=$archivo;

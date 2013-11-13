@@ -19,9 +19,9 @@ $pass = $_POST['pass'];
 //                  and user_usuario='$user' and pass_usuario='$pass';";
 
 $seleccionar =  "SELECT usuario.*, rol.nombre_tipo
-                FROM usuario, usuario_tiene, rol
-                where  usuario.id_usuario=usuario_tiene.id_usuario and 
-                usuario_tiene.id_rol=rol.id_rol
+                FROM usuario, usuario_rol, rol
+                where  usuario.id_usuario=usuario_rol.id_usuario and 
+                usuario_rol.id_rol=rol.id_rol
                 and user_usuario='$user' and pass_usuario='$pass';";
     
     $result  = pg_query($seleccionar) or die('ERROR AL OBTENER USUARIO: ' . pg_last_error());

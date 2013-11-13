@@ -58,7 +58,7 @@
                 
                 $idRol = pg_fetch_array(pg_query("SELECT id_rol FROM rol where nombre_tipo = 'olimpista';"));
                 
-                $regitrar ="insert into usuario_tiene(id_usuario,id_rol) values ("."$num,".$idRol["id_rol"].");";
+                $regitrar ="insert into usuario_rol(id_usuario,id_rol) values ("."$num,".$idRol["id_rol"].");";
                 //$consulta= pg_query($regitrar);
                 pg_exec($regitrar);
                 exec("powershell.exe mkdir ../archivo_olimpista/$num");

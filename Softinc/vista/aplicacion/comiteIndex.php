@@ -5,8 +5,12 @@
                 <ul class="sidebar">
                     <li><a href="../CreacionProblema.php" target="frame-principal">Crear problema</a></li>
                     <li><a href="#">Listar Problemas</a></li>
-                    <li><a href="#">Crear olimpiada</a></li>
-                    <li><a href="#">Historial de olimpiadas</a></li>
+                    <h4>Competencias:</h4>
+                    <li><a href="#">Crear</a></li>
+                    <li><a href="#">En servicio</a></li>
+                    <li><a href="#">Proximas</a></li>
+                    <li><a href="#">Anteriores</a></li>
+                    
                 </ul>
               
                <ul class="sidebar">
