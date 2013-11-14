@@ -37,3 +37,10 @@ textarea {
     margin-top:20px;
     cursor:pointer;
 }
+
+.introduccion {
+    position: absolute; 
+    top: 50%; 
+    font-size: 14px;
+    font-family: 'CentraleSansMedium', 'Lucida Grande', 'Trebuchet MS' ,sans-serif; 
+}

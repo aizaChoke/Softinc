@@ -133,15 +133,7 @@ hr { display: none; }
 }
 /*Side bar*/
 .sidebar {
-	//float:left;
-        //position:relative;
-        //left:170px;
-}
-
-.sidebar {
 	margin-top : 60px;
-	// padding: 10px 0px 0px 5px;
-	//line-height: normal;
 }
 
 .sidebar li {
@@ -466,7 +458,7 @@ hr { display: none; }
 #footer-bgcontent {
 	margin: 0px;
 	padding: 0px;
-	height: 99px;
+	height: 60px;
 	background: #394144;
 }
 

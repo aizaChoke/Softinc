@@ -11,7 +11,7 @@
 <div id="wrapper">
 	<div id="logo">
 		<h1><a href="#">Bienvenido al Juez Virtual SoftInc</a></h1>
-		<p><em> Here you will find hundreds of problems.</em></p>
+		<p><em> Aqui encontraran cientos de problemas.</em></p>
 	</div>
 	<hr />
 	<!-- end #logo -->
@@ -22,7 +22,7 @@
 				<!--<li class="current_page_item"><a href="#">Olimpiadas</a></li>-->
 				<li><a href="#">Olimpiadas</a></li>
 				<li><a href="#">Perfil</a></li>
-				<li><a href="#">Cerrar Sesion</a></li>
+				<li><a href="../Salir.php">Cerrar Sesion</a></li>
 			</ul>
 		</div>
 		<!-- end #menu -->
@@ -39,7 +39,7 @@
 	<!-- end #header -->
 <table>
     <tr class="texto-tipo-usuario">
-        <td>Olimpista: </td>
-        <td>Naira Romero Echeverria</td>
+        <td><?php echo $_GET["nombre_rol"]; ?>:</td>
+        <td><?php echo $_GET['nombre_usuario']." ".$_GET['apellido_usuario'];?></td>
     </tr>
 </table>

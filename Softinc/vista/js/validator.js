@@ -1,6 +1,6 @@
 
 $(document).ready(function() {  
-    <!--      Activamos la validación sobre el formulario -->  
+    //<!--      Activamos la validaciï¿½n sobre el formulario -->  
     $("#entityDataForm").validate({  
         errorContainer: "#errores",  
         errorLabelContainer: "#errores ul",  
@@ -34,13 +34,13 @@ $(document).ready(function() {
     });  
     $.validator.methods.basicoCaptcha = function(value, element, param) {return value == param;};  
       
-    <!--  Cuándo hagamos clic en el enlace manual mostraremos el número de errores del formulario -->  
+    //<!--  Cuï¿½ndo hagamos clic en el enlace manual mostraremos el nï¿½mero de errores del formulario -->  
     $("#manual").click(function() {  
-          alert("¿Formulario válido?: " + $("#entityDataForm").validate().form());  
+          alert("ï¿½Formulario vï¿½lido?: " + $("#entityDataForm").validate().form());  
           alert("Existen " + $("#entityDataForm").validate().numberOfInvalids() + " errores.");    
     });  
       
-    <!--  Cuándo hagamos clic en el enlace addRule agregaremos una regla de validación al campo con identificador campoX -->  
+    //<!--  Cuï¿½ndo hagamos clic en el enlace addRule agregaremos una regla de validaciï¿½n al campo con identificador campoX -->  
     $("#addRule").click(function() {  
             $("#campoX").rules("add", {  
                 required: true, minlength: 3,  
@@ -49,5 +49,9 @@ $(document).ready(function() {
                     minlength: jQuery.format("Son necesarios al menos {0} caracteres")  
                 }  
             });  
-    });  
+    }); 
+    
+    $("#seleccion1").click(function(){
+        console.log("seleccionado");
+    });
 });  

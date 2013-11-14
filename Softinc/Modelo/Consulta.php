@@ -26,10 +26,10 @@ class Consulta {
         $this->titulo="Usuarios de JUEZ VIRTUAL";
         $seleccionar='SELECT usuario.id_usuario, rol.id_rol,nombre_usuario, apellido_usuario, ci_usuario, user_usuario, 
                       pass_usuario, institucion_usuario, fecha_nacimiento_usuario, email_usuario
-                      FROM usuario, rol, usuario_tiene
-                      where usuario.id_usuario=usuario_tiene.id_usuario and rol.id_rol=usuario_tiene.id_rol';
+                      FROM usuario, rol, usuario_rol
+                      where usuario.id_usuario=usuario_rol.id_usuario and rol.id_rol=usuario_rol.id_rol';
         
-        $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
+        $result     = pg_query($seleccionar) or die('ERROR AL OBTENER USUARIO-CONSULTA.PHP: ' . pg_last_error());
         $columnas   = pg_numrows($result);
         $this->col='<tr>
                             <td>ID USUARIO</td>
@@ -136,16 +136,15 @@ function generarTablaEliminarProblema(){
     }     
     function generarPermisos(){
         include("../modelo/cnx.php");
-        session_start();
         $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
         $seleccionar=   'SELECT usuario.id_usuario, rol.nombre_tipo, nombre_usuario, apellido_usuario, ci_usuario, user_usuario, 
        pass_usuario, institucion_usuario, fecha_nacimiento_usuario, 
        email_usuario
-  FROM usuario, rol, usuario_tiene
- where usuario.id_usuario=usuario_tiene.id_usuario and rol.id_rol=usuario_tiene.id_rol
+  FROM usuario, rol, usuario_rol
+ where usuario.id_usuario=usuario_rol.id_usuario and rol.id_rol=usuario_rol.id_rol
                                order by id_usuario;';
         
-        $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
+        $result     = pg_query($seleccionar) or die('ERROR AL GENERAR PERMISOS: ' . pg_last_error());
         $columnas   = pg_numrows($result);
         $this->formu.='<table>';
         $this->formu.='<tr><td>Identificador</td>';
@@ -157,9 +156,25 @@ function generarTablaEliminarProblema(){
         $this->formu.='<td>Rol_Olimpista</td>';
         $this->formu.='<td>Rol_Comite</td>';
         $this->formu.='<td>Rol_Administrador</td></tr>';
+        
         for($i=0;$i<=$columnas-1; $i++){
-            $line = pg_fetch_array($result, null, PGSQL_ASSOC);
-  
+        $line = pg_fetch_array($result, null, PGSQL_ASSOC);
+        
+            $checkOlimpista = "";
+            $checkComite = "";
+            $checkAdministrador = "";
+        
+//                if (strcmp($line['nombre_tipo'], "olimpista") == 0) {
+//                    $checkOlimpista = 'checked';
+//                } else {
+//                    
+//                    if (strcmp($line['nombre_tipo'], "comite") == 0) {
+//                        $checkComite = 'checked';
+//                    } else {
+//                        $checkAdministrador = 'checked';
+//                    }
+//                }
+                
                $this->formu.='<tr>             
                <td>'.$line['id_usuario'].'</td> 
                <td>'.$line['nombre_tipo'].'</td> 
@@ -167,9 +182,9 @@ function generarTablaEliminarProblema(){
                <td>'.$line['apellido_usuario'].'</td> 
                <td>'.$line['ci_usuario'].'</td> 
                <td>'.$line['institucion_usuario'].'</td>
-               <td><input type="CHECKBOX" name="rol[]" value='.$line['id_usuario']."_3_".'> olimpista   </td>
-               <td>    <input type="CHECKBOX" name="rol[]" value='.$line['id_usuario']."_2_".'>comite       </td>
-               <td>    <input type="CHECKBOX" name="rol[]" value='.$line['id_usuario']."_1_".'>administrador</td>
+               <td><input type="CHECKBOX" name="rol[]" value='.$line['id_usuario']."_3_ ".$checkOlimpista.'> Olimpista   </td>
+               <td>    <input type="CHECKBOX" name="rol[]" value='.$line['id_usuario']."_2_ ".$checkComite.' >Comite       </td>
+               <td>    <input type="CHECKBOX" name="rol[]" value='.$line['id_usuario']."_3_ ".$checkAdministrador.'>Administrador</td>
                </tr>';
              
         }  

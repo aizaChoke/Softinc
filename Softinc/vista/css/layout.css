@@ -80,7 +80,7 @@
 		margin-left:25px;
 	}
 	
-	input[type="text"], input[type="password"]{
+	input[type="text"], input[type="password"], input[type="email"]{
 		box-shadow: 0px 0px 0px 4px #f2f5f7;
 		width: 290px;
 		height: 33px;
@@ -89,6 +89,9 @@
 		margin: 0 auto;
 		color: #aeaeae;
 		border: 1px solid #bec2c4;
+                /*margin-left: 104px;*/
+                margin-top: 11px;
+                border-radius: 7px;
 	}
 	
 	input[type="text"]:focus, input[type="password"]:focus{
@@ -102,16 +105,29 @@
 	
 	
 	button {
-		background:url(../images/login.png) no-repeat;
-		width:82px;
+                /*margin-left: 189px;*/
+                margin-top: 32px;
+                background: -webkit-linear-gradient(top, #79bc64, #578843);
+                border: 1px solid;
+                -webkit-border-radius: 5px;
+                color: #fff;
+                cursor: pointer;
+                display: inline-block;
+                letter-spacing: 1px;
+                position: relative;
+                text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+                /*
+                width:82px;
 		height:32px;
 		border:0px;
 		float: right;
 		margin-right: 24px;
+                */
 	}
-	
+	/*
 	button:hover {
-		background:url(../images/login_hover.png) no-repeat;
+		
+                background:url(../images/login_hover.png) no-repeat;
 		width:82px;
 		height:32px;
 		border:0px;
@@ -123,7 +139,7 @@
 		height:32px;
 		border:0px;
 	}	
-	
+	*/
 	
 	label {
 		display: inline;
@@ -158,8 +174,8 @@
 	p.forgot a:hover {
 		color: #65c4e5;
 	}
+        
 
-	
 
 /* #Media Queries
 ================================================== */

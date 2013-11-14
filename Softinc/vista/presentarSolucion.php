@@ -2,17 +2,15 @@
    <head>
     <meta charset="utf-8">
  
-    <link rel="stylesheet" media="screen" href="css/estilos1.css" >
-    <script  type="text/javascript" src="js/funcion.js" > </script>
     
-    <script type="text/javascript" src="js/jquery-1.9.0.js"></script>
-    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+    <script  type="text/javascript" src="js/funcion.js"></script>
     
+   
     
     <script src="js/jquery.js"></script>
 	<script>window.jQuery || document.write("<script src='js/jquery-1.5.1.min.js'>\x3C/script>")</script>
 	<script src="js/app.js"></script>
-     <link rel="stylesheet" href="css/base.css">
+<!--     <link rel="stylesheet" href="css/base.css">-->
  <link rel="stylesheet" href="css/skeleton.css">
     
     
@@ -30,25 +28,25 @@
 <table>
 <tr>
 	<td>Seleccione lenguaje de programacion :</td>
+        
 </tr>
 
 <tr> 
-	<td><input type='radio'  name='tipoCodigo' size='40' maxlength='40' value='java'  required /> java</td>
+	<td>
+            <select>
+                <option value="java">Java</option>
+                <option value="C">C</option>
+                <option value="C++">C++</option>
+            </select>
+        </td>
 </tr>
-<tr>
-	<td><input type='radio' name='tipoCodigo' size='40' maxlength='40' value='c' required /> c</td>
-</tr>
-<tr>
-	<td><input type='radio' name='tipoCodigo' size='40' maxlength='40' value='cpp' required /> c++</td>
-</tr>
-
 <tr>
     <td>Codigo de problema :</td>
 </tr>
 <tr><td><input type='text' id='num' name='titulo' size='40' maxlength='40' placeholder="codigo problema"  required /></td></tr>
 <tr> 
-	<td><input type='radio' id="seleccion1" name='subir' size='40' maxlength='40' value='Escriba codigo'  required /> Escriba codigo</td>
-        <td><input type='radio' id="seleccion2" name='subir' size='40' maxlength='40' value='Suba codigo' required /> Suba codigo</td>
+	<td><input checked="checked" onclick="habilitarEscribirCodigo()" type='radio' id="seleccion1" name='subir' size='40' maxlength='40' value='Escriba codigo'  required /> Escriba codigo</td>
+        <td><input  onclick="habilitarSeleccionarArchivo()"type='radio' id="seleccion2" name='subir' size='40' maxlength='40' value='Suba codigo' required /> Seleccionar archivo</td>
         
 </tr>
 
@@ -68,8 +66,7 @@
     
     
 <div align="center"><br>
-  <div align="center">   
- <a href="../vista/principal.html">Volver a pagina principal </a> 
+  <div align="center"> 
  
 </div>
 </body>

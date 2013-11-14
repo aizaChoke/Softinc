@@ -21,7 +21,7 @@
        
        if(texto1.length==0  )
        {
-        alert("escriva");
+        alert("escriba");
         bandera=false;
        }
     }
@@ -158,4 +158,16 @@ function validarUsurio()
            });
    
   
- }
+}
+ 
+ function habilitarEscribirCodigo(){
+    
+     document.getElementById('codigo').disabled=true;
+     document.getElementById('texto').disabled=false;
+     
+}
+ function habilitarSeleccionarArchivo(){
+    
+     document.getElementById('codigo').disabled=false;
+     document.getElementById('texto').disabled=true;
+}

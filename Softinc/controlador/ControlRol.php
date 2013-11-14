@@ -16,10 +16,11 @@ $arrayDatos=$contenedor->getCadena($cadena);
 //echo var_dump($arrayDatos);
 for($i=0;  $i<count($arrayDatos);  $i=$i+2){
         $modificar=
-        'UPDATE usuario_tiene
+        'UPDATE usuario_rol
    SET  id_rol='.(integer)$arrayDatos[$i+1].'
  WHERE id_usuario='.(integer)$arrayDatos[$i].';';
         $result = pg_query($cnx, $modificar) or die('ERROR AL modificar DATOS: ' . pg_last_error());
+        echo "Permisos cambiados con exito.";
 
 }
 ?>
