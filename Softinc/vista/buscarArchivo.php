@@ -13,8 +13,8 @@ $indices=array();
 
 
 
- $seleccionar=   'SELECT id_competencia, id_problema
-  FROM competencia_tiene
+ $seleccionar=   'SELECT id_competencia_problema, id_problema, id_competencia
+  FROM competencia_problema
   where id_competencia='.$id_competencia;
         
         $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
@@ -35,15 +35,11 @@ $indices=array();
 
 
 
-        var_dump($problemas);
-
-
-
 
 if(count($problemas)>0){
 
 for($i=0;$i<count($problemas);$i++){
-  $insertar= "INSERT INTO competencia_tiene(id_competencia, id_problema)
+  $insertar= "INSERT INTO competencia_problema( id_competencia,id_problema)
             VALUES ('$id_competencia', '$problemas[$i]');";
 $result = pg_query($cnx, $insertar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
 }

@@ -10,7 +10,7 @@
         <?php 
         include '../modelo/Competencia.php';
         $competencia=new Competencia();
-        echo $competencia->siguienteCompetencia();
+        echo $competencia->anteriorCompetencia();
         ?>
         </form>
 

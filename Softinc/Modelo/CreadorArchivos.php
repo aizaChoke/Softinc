@@ -48,8 +48,8 @@ class CreadorArchivos {
                     $problema=$_REQUEST['nombre'];
                     
                     
-                    $insertar= "INSERT INTO problema(id_usuario, nombre_problema, descripcion_problema)
-                                 VALUES ('$usuario','$nombreRescatado' , 'nada');";
+                    $insertar= "INSERT INTO problema(id_usuario, nombre_problema)
+                                 VALUES ('$usuario','$nombreRescatado');";
                     $result = pg_query($cnx, $insertar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
                //     echo $nombreRescatado;
                     $seleccionar="SELECT id_problema  FROM problema  where nombre_problema='$nombreRescatado'";

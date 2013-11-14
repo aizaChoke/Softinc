@@ -2,7 +2,6 @@
 <html>
     <head>
                 <script type="text/javascript" src="../vista/js/1.js"></script>
-  
         <title></title>
     </head>
     <body>
@@ -10,7 +9,7 @@
         <?php 
         include '../modelo/Competencia.php';
         $competencia=new Competencia();
-        echo $competencia->siguienteCompetencia();
+        echo $competencia->CompetenciaActual();
         ?>
         </form>
 

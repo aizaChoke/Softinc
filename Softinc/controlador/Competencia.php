@@ -6,4 +6,5 @@ require '../modelo/Consulta.php';
 $consulta=new Consulta();
 echo $consulta->generarProblemasCompetencia($competencia);
 }
+
 ?>

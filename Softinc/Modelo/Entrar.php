@@ -13,9 +13,9 @@ $pass = $_POST['pass'];
     $seleccionar="SELECT usuario.id_usuario, nombre_usuario, apellido_usuario, ci_usuario, user_usuario, 
                   pass_usuario, institucion_usuario, fecha_nacimiento_usuario, 
                   email_usuario, rol.id_rol
-                  FROM usuario, usuario_tiene, rol
-                  where  usuario.id_usuario=usuario_tiene.id_usuario and 
-                  usuario_tiene.id_rol=rol.id_rol
+                  FROM usuario, usuario_rol, rol
+                  where  usuario.id_usuario=usuario_rol.id_usuario and 
+                  usuario_rol.id_rol=rol.id_rol
                   and user_usuario='$user' and pass_usuario='$pass';";
     
     $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
