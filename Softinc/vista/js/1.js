@@ -33,10 +33,6 @@ function verProblema(){
        document.getElementById('iMarco').src="descargar_archivo.php";
     
 }
-function crear_equipo(){
-       document.getElementById('iMarco').src="CrearEquipo.php";
-    
-}
 
 
 
@@ -51,7 +47,7 @@ function descargar_archivo(){
 }
 
 function subirCodigo(){
-     document.getElementById('iMarco').src="suvirProblemaJuez.php";
+     document.getElementById('iMarco').src="presentarSolucion.php";
 }
 function crear_competencia(){
 document.getElementById('iMarco').src="CrearCompetencia.php";
@@ -59,62 +55,12 @@ document.getElementById('iMarco').src="CrearCompetencia.php";
 function concurso_proximo(){
     document.getElementById('iMarco').src="CompetenciaProxima.php";
 }
-function concurso_actual(){
-    document.getElementById('iMarco').src="CompetenciaActual.php";
-}
-function concurso_anterior(){
-    document.getElementById('iMarco').src="CompetenciaAnterior.php";
-}
 
 //salir sesion
 
 function salir(){
     document.getElementById('iMarco').src="Salir.php";
 }
-
-
-
-
-
-
-
-
-
-function FormatoHora(evt,str) 
-{ 
-var nav4 = window.Event ? true : false; 
-var key = nav4 ? evt.which : evt.keyCode; 
-hora=str.value 
-
-if(hora.length==0) 
-{ 
-return ((key >= 48 && key <= 50)); 
-} 
-if(hora.length==1) 
-{ 
-if(hora.charAt(0)==2) 
-{return ((key >= 48 && key <= 51));	} 
-else{return ((key >= 48 && key <= 57));} 
-} 
-if(hora.length==2) 
-{ 
-return ((key == 58)); 
-} 
-if(hora.length==3) 
-{ 
-return ((key >= 48 && key <= 53)); 
-} 
-if(hora.length==4) 
-{ 
-return ((key >= 48 && key <= 57)); 
-} 
-if(hora.length>4) 
-{ 
-return false; 
-} 
-} 
-
-
 
 
 
