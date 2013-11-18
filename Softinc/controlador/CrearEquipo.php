@@ -122,6 +122,19 @@ if(isset($_POST['agregar_usuarios_competencia'])){
     $result = pg_query($cnx, $insertar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
     }
 }
+if(isset($_POST['agregar_usuario'])){
+    require '../modelo/Consulta.php';
+    $consul=new Consulta();
+    $id_competencia=$_POST['idCompetencia'];
+    $arrayIDUsuarios=$_POST['usuarios'];
+        for($i=0; $i<count($arrayIDUsuarios); $i++){
+    $insertar= "INSERT INTO competencia_usuario(id_usuario, id_competencia)
+                                        VALUES ('$arrayIDUsuarios[$i]', '$id_competencia');";
+    $result = pg_query($cnx, $insertar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
+    }
+    require '../vista/UsuariosCompetencia.php';
+
+}
 
 
 

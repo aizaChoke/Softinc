@@ -14,9 +14,9 @@
         <ul id="menu1">
   <li>Competencia
         <ul>
-            <li><a onclick="javascript:dddddd();"><input type="button" value="Competencia en servicio"></a></li>
+            <li><a onclick="javascript:concurso_actual();"><input type="button" value="Competencia en servicio"></a></li>
             <li><a onclick="javascript:concurso_proximo();"><input type="button" value="Proximas Competencias"></a></li>
-            <li><a onclick="javascript:dsadsa();"><input type="button" value="Anteriores Competencias"></a></li>
+            <li><a onclick="javascript:concurso_anterior();"><input type="button" value="Anteriores Competencias"></a></li>
         </ul>
   </li>
             <input type="button" value="Rankin" onclick="javascript:rankin();"><br>
