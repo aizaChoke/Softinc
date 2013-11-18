@@ -33,10 +33,6 @@ function verProblema(){
        document.getElementById('iMarco').src="descargar_archivo.php";
     
 }
-function crear_equipo(){
-       document.getElementById('iMarco').src="CrearEquipo.php";
-    
-}
 
 
 
@@ -59,12 +55,6 @@ document.getElementById('iMarco').src="CrearCompetencia.php";
 function concurso_proximo(){
     document.getElementById('iMarco').src="CompetenciaProxima.php";
 }
-function concurso_actual(){
-    document.getElementById('iMarco').src="CompetenciaActual.php";
-}
-function concurso_anterior(){
-    document.getElementById('iMarco').src="CompetenciaAnterior.php";
-}
 
 //salir sesion
 
@@ -80,6 +70,7 @@ function salir(){
 
 
 
+<<<<<<< HEAD
 function FormatoHora(evt,str) 
 { 
 var nav4 = window.Event ? true : false; 
@@ -124,6 +115,8 @@ return false;
 
 
 
+=======
+>>>>>>> 22a3402f6f3d58e27ae73b409c72a795410ce441
 
 
 
