@@ -5,10 +5,12 @@ class Competencia {
     
     function crearCompetencia($nombre_olimpiada, $fecha_ini, $fecha_fin, $hora_ini, $hora_fin, $creador){
         include("../modelo/cnx.php");
+        $inicio=$fecha_ini." ".$hora_ini;
+        $fin=$fecha_fin." ".$hora_fin;
         $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
-        $insertar= "INSERT INTO competencia( nombre_competencia, fecha_inicio_competencia, 
-            fecha_fin_competencia, hora_inicio_competencia, hora_fin_competencia, creador_competencia)
-            VALUES ('$nombre_olimpiada', '$fecha_ini','$fecha_fin', '$hora_ini', '$hora_fin', '$creador');";
+        $insertar= "INSERT INTO competencia(nombre_competencia, fecha_inicio_competencia, 
+            fecha_fin_competencia, creador_competencia)
+            VALUES ('$nombre_olimpiada', '$inicio', '$fin', '$creador');";
         $result = pg_query($cnx, $insertar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
         
    /*
@@ -43,7 +45,7 @@ class Competencia {
 $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competencia, 
                       fecha_fin_competencia, hora_inicio_competencia, hora_fin_competencia, creador_competencia
                       FROM competencia
-                      where  fecha_inicio_competencia<current_date;';
+                      where  fecha_fin_competencia<current_date;';
         
         $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
         $columnas   = pg_numrows($result);
@@ -72,9 +74,9 @@ $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competenci
         session_start();
         $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
 $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competencia, 
-                      fecha_fin_competencia, hora_inicio_competencia, hora_fin_competencia, creador_competencia
-                      FROM competencia
-                      where fecha_inicio_competencia=current_date and fecha_fin_competencia>=current_date';
+                fecha_fin_competencia, creador_competencia
+                FROM competencia
+                where current_date between fecha_inicio_competencia and fecha_fin_competencia';
         
         $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
         $columnas   = pg_numrows($result);
@@ -90,7 +92,7 @@ $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competenci
         for($i=0;$i<=$columnas-1; $i++){
             $line = pg_fetch_array($result, null, PGSQL_ASSOC);
              $this->formu.='<tr>
-                             <td>'.$line['id_competencia'].'</td> <td>'.$line['nombre_competencia'].'</td><td>'.$line['fecha_inicio_competencia'].'</td> <td>'.$line['fecha_fin_competencia'].'</td> <td><input type="submit" name="competencia"  value='.$line['id_competencia'].'></td>                                    
+                             <td>'.$line['id_competencia'].'</td> <td>'.$line['nombre_competencia'].'</td><td>'.$line['fecha_inicio_competencia'].'</td> <td>'.$line['fecha_fin_competencia'].'</td> <td><input type="button" href="javascript:;" onclick="realizaProceso('.$line['id_competencia'].');return false;" value="'.$line['id_competencia'].'"/></td>                                    
                             </tr>';                                                                                                                                                                    
         }  
         $this->formu.='</table>';
@@ -166,7 +168,7 @@ $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competenci
     
     function getIDCompetencia($nombreCompetencia){
         $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competencia, 
-                        fecha_fin_competencia, hora_inicio_competencia, hora_fin_competencia, creador_competencia
+                        fecha_fin_competencia, creador_competencia
                         FROM competencia;';
         $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
         $columnas   = pg_numrows($result);
