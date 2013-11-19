@@ -41,6 +41,10 @@ while($fila = pg_fetch_array($listaProble))
 echo "</table>";
 
 ?>
+
+
+
 </div>
+
 </body>
 </html>
