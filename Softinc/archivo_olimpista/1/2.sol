@@ -1,3 +1,0 @@
-buenito
-animo
-tito
