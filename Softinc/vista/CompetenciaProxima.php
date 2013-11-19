@@ -2,7 +2,7 @@
 <html>
     <head>
                 <script type="text/javascript" src="../vista/js/1.js"></script>
-    </head>
+  
         <title></title>
     </head>
     <body>

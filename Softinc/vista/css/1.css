@@ -11,6 +11,18 @@
   margin-left:300px;
   
 }
+/*Competencia Actual*/
+#tabla {
+  float:left; 
+  padding:0px;
+  width:400px;
+ 
+}
+#resultado{
+  padding:0px;
+  margin-left:300px;
+  
+}
 /*contenido de competencia*/
 #menuCompetencia{
   float:left; 

@@ -5,7 +5,7 @@
    var seleccionDato1 = document.getElementById("seleccion1").checked;
    var texto1 = document.getElementById("texto").value;
    var seleccionDato2 = document.getElementById("seleccion2").checked;
-   var examinar = document.getElementById("codigo").value;
+   var examinar = document.getElementById("programa").value;
   //alert(seleccionDato);
    //  alert(seleccionDato1);
  
@@ -21,7 +21,7 @@
        
        if(texto1.length==0  )
        {
-        alert("escriba");
+        alert("escriva");
         bandera=false;
        }
     }
@@ -54,34 +54,30 @@ boton.addEventListener('click',validar, false);
 
 function validarUsuario()
 {
+    
   var password =document.getElementById("passwordUsuario").value;
   var passwordRepetir =document.getElementById("repetirPasswordUsuario").value;
-  var elem = document.getElementById(id);
-   
-  /*
-   *
-   * 
-   **/
-  
-  
   var bandera=true;
-  if(password.length < 2 && passwordRepetir.length < 2)
+
+  if(password.length < 6 && passwordRepetir.length < 6)
       {
-          alert("ingreso muy pocos caracteres");
+          alert("Ingrese minimo 6 caracteres en su password");
           bandera=false;
-elem.style.borderColor = "blue";  
+             
 }
   if(password != passwordRepetir)
       {
-          elem.style.borderColor = "blue";
+          
           alert("password diferentes");
           bandera=false;
       }
       if(bandera==true)
           {
-           alert("sus datos son correctos");   
+           alert("sus datos entan siendo enviados y veridicando");   
           }
- return bandera;
+    
+  
+ return bandedera;
  }
     /*
     var url= 'validar usuario.php';
@@ -132,42 +128,56 @@ function comprueba_extension(archivo) {
 } 
 
 
-function validarUsurio()
-{ 
-  var parametros='usuario='+document.getElementById("comprobaruaurio").value; 
- var consulta=document.getElementById("comprobaruaurio").value;
-  alert(consulta);
-           $("#resultado").delay(1000).queue(function(n) {      
-                                         
-                $("#resultado").html('<img src="ajax-loader.gif" />');
-                                         
-                      $.ajax({
-                            type: "POST",
-                            url: "comprobar.php",
-                            data: "login="+consulta,
-                            dataType: "html",
-                            error: function(){
-                                  alert("error petición ajax");
-                            },
-                            success: function(data){                                                      
-                                  $("#resultado").html(data);
-                                  n();
-                            }
-                });
-                                         
-           });
-   
-  
+
+ //document.getElementById('campo').disabled=true;
+// var seleccionDato1 = document.getElementById("seleccion1").checked;
+function bloquea(){
+
+if (document.getElementById("seleccion1").checked ==true) {
+document.getElementById('programa').disabled=true;
+document.getElementById('codigoFuente').disabled=false;
 }
- 
- function habilitarEscribirCodigo(){
-    
-     document.getElementById('codigo').disabled=true;
-     document.getElementById('texto').disabled=false;
-     
+
+if (document.getElementById("seleccion2").checked ==true) {
+
+document.getElementById('codigoFuente').disabled=true
+document.getElementById('programa').disabled=false;
 }
- function habilitarSeleccionarArchivo(){
-    
-     document.getElementById('codigo').disabled=false;
-     document.getElementById('texto').disabled=true;
+
+
+}
+
+
+function validarusuarioEntrada(usuario)
+{
+	var url ='../js/comprobarUsuario.php';
+	var parametros='user='+document.getElementById("user").value;
+	var ajax = new Ajax.Updater('conprobarusuario',url,{method: 'get', parameters: parametros});
+	
+         
+}
+
+function validarusuarioformulario(usuario)
+{
+	var url ='js/comprobarfomulario.php';
+	var parametros='usuarioUsuario='+document.getElementById("usuarioUsuario").value;
+	var ajax = new Ajax.Updater('conprobarusuario',url,{method: 'get', parameters: parametros});
+	 
+         var cadenaEspacio= document.getElementById("usuarioUsuario").value;
+         var re = /^[A-z]*$/;
+       
+           if (!isNaN(cadenaEspacio[0]))//(!re.test(cadenaEspacio[0]) && !re.test(cadenaEspacio[1]) &&!re.test(cadenaEspacio[2]) &&!re.test(cadenaEspacio[3])  )
+             {              
+                     alert("Deve comemensar con un caracter");   
+             }   
+             
+          var iChars = "!@#$%^&*()+=-[]\\';,./{}|\":<>?";
+
+           for (var i = 0; i < cadenaEspacio.length; i++) {
+                if (iChars.indexOf(cadenaEspacio.charAt(i)) != -1 ) {
+                    alert ("Solo letras y numeros");
+        
+                 }
+                }
+         
 }

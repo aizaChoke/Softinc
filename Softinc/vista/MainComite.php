@@ -22,9 +22,10 @@
   <li>Competencia
         <ul>
             <li><a onclick="javascript:crear_competencia();"><input type="button" value="Crear Competencia"></a></li>
-            <li><a onclick="javascript:dddddd();"><input type="button" value="Competencia en servicio"></a></li>
+            <li><a onclick="javascript:concurso_actual();"><input type="button" value="Competencia en servicio"></a></li>
             <li><a onclick="javascript:concurso_proximo();"><input type="button" value="Proximas Competencias"></a></li>
-            <li><a onclick="javascript:dsadsa();"><input type="button" value="Anteriores Competencias"></a></li>
+            <li><a onclick="javascript:concurso_anterior();"><input type="button" value="Anteriores Competencias"></a></li>
+            <li><a onclick="javascript:crear_equipo();"><input type="button" value="Crear Equipo"></a></li>
         </ul>
   </li>
             <input type="button" value="Rankin" onclick="javascript:rankin();"><br>

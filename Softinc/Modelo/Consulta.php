@@ -18,9 +18,8 @@ class Consulta {
         $this->col="";
         $this->cierre="";
         $this->formu="";
-        
-       // $this->generarTabla();
     }
+    
     function generarTablaUsuarios(){
         include("cnx.php");
         $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
@@ -55,6 +54,47 @@ class Consulta {
                                 <td>'.$line['institucion_usuario'].'</td>
                              </tr>';
         }   
+        
+    }   
+        function generarTablaUsuariosEquipos(){
+        include("cnx.php");
+        $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
+
+        $seleccionar='SELECT usuario.id_usuario, rol.id_rol, nombre_usuario, apellido_usuario, ci_usuario, user_usuario, 
+       pass_usuario, institucion_usuario, fecha_nacimiento_usuario, email_usuario
+  FROM usuario, usuario_rol, rol
+  where usuario.id_usuario=usuario_rol.id_usuario
+	and rol.id_rol=usuario_rol.id_rol';
+        
+        $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
+        $columnas   = pg_numrows($result);
+        $this->formu.='<table>';
+        $this->formu.='<tr>
+                            <td>ID USUARIO</td>
+                            <td>ID ROL</td>
+                            <td>NOMBRE </td>
+                            <td>APELLIDO</td>
+                            <td>CI</td>
+                            <td>USER</td>
+                            <td>PASSWORD</td>
+                            <td>INSTITUCION</td>
+                       </tr>';
+        for($i=0;$i<$columnas; $i++){
+            $line = pg_fetch_array($result, null, PGSQL_ASSOC);
+            $this->formu.='<tr>
+                                <td>'.$line['id_usuario'].'</td>
+                                <td>'.$line['id_rol'].'</td>
+                                <td>'.$line['nombre_usuario'].'</td>
+                                <td>'.$line['apellido_usuario'].'</td>
+                                <td>'.$line['ci_usuario'].'</td>
+                                <td>'.$line['user_usuario'].'</td>
+                                <td>'.$line['pass_usuario'].'</td>
+                                <td>'.$line['institucion_usuario'].'</td>
+                                <td><input value='.$line['id_usuario'].' name="Contenedor[]" type="checkbox" /></td>
+                             </tr>';
+        }   
+        $this->formu.='</table>';
+        return $this->formu;
         
     }   
     function eliminar($id){
@@ -222,13 +262,15 @@ function generarTablaEliminarProblema(){
         include("../modelo/cnx.php");
        // session_start();
         $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
-        $seleccionar=   'SELECT id_problema, id_usuario, nombre_problema, descripcion_problema
+        $seleccionar=   'SELECT id_problema, nombre_problema
   FROM problema;';
 
         
         $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
         $columnas   = pg_numrows($result);
         $this->archivos.='<table>';
+        $this->archivos.='<tr><td>Identificador</td>';
+        $this->archivos.='<td>Nombre</td></tr>';
         for($i=0;$i<=$columnas-1; $i++){
             $line = pg_fetch_array($result, null, PGSQL_ASSOC);
             $nombre=$line['id_problema'];
@@ -254,7 +296,7 @@ function generarTablaEliminarProblema(){
                   include("../modelo/cnx.php");
                   $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
                 //  session_start();
-                  $seleccionar="SELECT id_problema, usuario.id_usuario, nombre_problema, descripcion_problema
+                  $seleccionar="SELECT id_problema, usuario.id_usuario, nombre_problema
                                 FROM problema, usuario
                                 where problema.id_usuario=usuario.id_usuario
                                 and usuario.id_usuario=".$_SESSION["id_usuario"];
@@ -277,12 +319,10 @@ function generarTablaEliminarProblema(){
                   include("../modelo/cnx.php");
                   $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
                   session_start();
-                  $seleccionar="SELECT competencia.id_competencia, nombre_competencia, fecha_inicio_competencia, 
-       hora_inicio_competencia, duracion_competencia
-  FROM usuario, competencia, usuario_pertenece
-where usuario.id_usuario=usuario_pertenece.id_usuario and
-	usuario_pertenece.id_competencia=competencia.id_competencia and
-	usuario.id_usuario=".$_SESSION["id_usuario"];
+                  $seleccionar="SELECT id_competencia, nombre_competencia, fecha_inicio_competencia, 
+                                fecha_fin_competencia, hora_inicio_competencia, hora_fin_competencia, creador_competencia
+                                FROM competencia
+                                where creador_competencia=".$_SESSION["id_usuario"];
     
                 $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
                 $columnas   = pg_numrows($result);
@@ -334,19 +374,22 @@ where usuario.id_usuario=usuario_pertenece.id_usuario and
         include("../modelo/cnx.php");
         $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
           //  session_start();
-          $seleccionar="SELECT problema.id_problema, id_usuario, nombre_problema, descripcion_problema
-  FROM problema, competencia_tiene
-  where competencia_tiene.id_problema=problema.id_problema
-	and competencia_tiene.id_competencia=".$id_competencia;
+          $seleccionar="SELECT problema.id_problema, id_usuario, nombre_problema
+                        FROM problema, competencia_problema
+                        where competencia_problema.id_problema=problema.id_problema
+                        and competencia_problema.id_competencia=".$id_competencia;
     
           $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
           $columnas   = pg_numrows($result);
         $this->formu.='<table>';
+        $this->formu.='<tr><td>Identificador</td>';
+        $this->formu.='<td>Nombre</td></tr>';
         for($i=0;$i<=$columnas-1; $i++){
             $line = pg_fetch_array($result, null, PGSQL_ASSOC);
                $this->formu.='<tr>             
                <td>'.$line['id_problema'].'</td> 
                <td>'.$line['nombre_problema'].'</td>
+               <td><a href="../archivo_comite/'.$line['id_problema'].'/'.$line['id_problema'].'.pdf">Descargar Enunciado</a></td>
                </tr>';
              
         }  
@@ -354,16 +397,69 @@ where usuario.id_usuario=usuario_pertenece.id_usuario and
         return $this->formu;    
 
     }
-                
-                
-                
-        
     
     
+        function generarUsuariosCompetencia(){
+            
+        include("../modelo/cnx.php");
+        $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
+          //  session_start();
+          $seleccionar="SELECT id_usuario, nombre_usuario, apellido_usuario, ci_usuario, user_usuario, 
+                        pass_usuario, institucion_usuario, fecha_nacimiento_usuario, email_usuario
+                        FROM usuario;";
     
+          $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
+          $columnas   = pg_numrows($result);
+        $this->formu.='<table>';
+        $this->formu.='<tr><td>Identificador</td>';
+        $this->formu.='<td>Nombre</td>';
+        $this->formu.='<td>Apellido</td>';
+        $this->formu.='<td>Fecha de Nacimiento</td>';
+        $this->formu.='<td>Correo electronico</td></tr>';
+
+        for($i=0;$i<=$columnas-1; $i++){
+            $line = pg_fetch_array($result, null, PGSQL_ASSOC);
+               $this->formu.='<tr>             
+               <td>'.$line['id_usuario'].'</td> 
+               <td>'.$line['nombre_usuario'].'</td>
+               <td>'.$line['apellido_usuario'].'</td>
+               <td>'.$line['fecha_nacimiento_usuario'].'</td>
+               <td>'.$line['email_usuario'].'</td>
+               <td><input type="CHECKBOX" name="usuarios[]" value='.$line['id_usuario'].'></td>
+               </tr>';
+             
+        }  
+        $this->formu.='</table>';
+        return $this->formu;    
+
+    }
     
+    function generarEquiposCompetencia(){
+            
+        include("../modelo/cnx.php");
+        $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
+          //  session_start();
+          $seleccionar="SELECT id_equipo, nombre_equipo
+                        FROM equipo;";
+    
+          $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
+          $columnas   = pg_numrows($result);
+        $this->formu.='<table>';
+         $this->formu.='<tr><td>Identificador</td>';
+          $this->formu.='<td>Nombre</td></tr>';
+        for($i=0;$i<=$columnas-1; $i++){
+            $line = pg_fetch_array($result, null, PGSQL_ASSOC);
+               $this->formu.='<tr>             
+               <td>'.$line['id_equipo'].'</td> 
+               <td>'.$line['nombre_equipo'].'</td>
+               <td><input type="CHECKBOX" name="equipos[]" value='.$line['id_equipo'].'></td>
+               </tr>';            
+        }  
+        $this->formu.='</table>';
+        return $this->formu;    
+    }
 }
 //$c=new Consulta();
-//echo $c->generarArchivosSubidosComite();
+//echo $c->generarTablaUsuariosEquipos();
 
 ?>

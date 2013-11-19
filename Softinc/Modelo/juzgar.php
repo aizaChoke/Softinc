@@ -1,7 +1,8 @@
 
 <?php 
-
-session_start();
+ include 'cnx.php';
+ $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
+ session_start();
 //$_SESSION["ci_usuario"];
 
 class Juzgar 
@@ -16,18 +17,19 @@ class Juzgar
         $this->mensaje="";
     }
     
-    function compilarPrograma($lenguaje, $CodigoFuente, $titulo)
-                
+    function compilarPrograma($lenguaje, $CodigoFuente, $titulo)     
     {
-        
-        include 'cnx.php';
-        $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
         include 'cronometro.php' ;
-         $casio = new cronometro();
-         $compilar="falla";
-          $bandera=true;
-          $id_usuario= $_SESSION["id_usuario"];
-           //echo "-$id_usuario-";
+        $casio = new cronometro();
+        $compilar="falla";
+        $bandera=true;
+        $id_usuario=$_SESSION["id_usuario"];
+        echo "--$id_usuario--";
+        $hora = date("H:i",time());
+        list($ho , $minut) = explode(':', $hora);
+        $hora=date("H:i",mktime($ho-4, $minut, 0));
+        $fecha = date('Y-n-d');
+        echo $fecha;
        if(!strcmp($lenguaje, "java") )
         { 
                if(exiteArchivo("../archivo_comite/",$titulo)==true)//--------------------
@@ -45,7 +47,7 @@ class Juzgar
             }
            // echo "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"; 
             echo $CodigoFuente;
-            exec("powershell.exe javac $CodigoFuente");
+            exec("javac $CodigoFuente");
            // exec("java principal < ../archivo/problema/1/1.in  >../archivo/olimpista/1/1.out");
            //echo file_exists("$nombreSinExtencion[0].class");
             if(file_exists("$nombreSinExtencion[0].class") == 1)  
@@ -57,6 +59,14 @@ class Juzgar
                 $tipo1 = array ("in");
                 $tipo2 = array ("sol");
                $entrada=listar_ficheros($tipo1,"../archivo_comite/$titulo/");
+              for($i=0;$i<sizeof($entrada);$i++)
+              { 
+                  $crearArchivo1=explode(".",$entrada[$i]);
+                  //echo "*$crearArchivo1[0]*";
+                  fopen("../archivo_olimpista/$id_usuario/$titulo/$crearArchivo1[0].sol", "w+");
+                 
+              }
+               
                $solucion=listar_ficheros($tipo2,"../archivo_olimpista/$id_usuario/$titulo/");
                echo "$titulo";
                exec("powershell.exe  mkdir ../archivo_olimpista/$id_usuario/$titulo");
@@ -70,24 +80,18 @@ class Juzgar
             
               // eliminafila("../archivo_olimpista/$titulo/$solucion[$i]");
                }
-              
-               if(($casio->stop(true, 2)) <30  )  
+               $timeEjecucion=($casio->stop(true, 2));
+               $timeEjecucion1=explode(",",$timeEjecucion);
+               $timeEjecucion2=$timeEjecucion1[0].".".$timeEjecucion1[1];
+               if($timeEjecucion <30  )  
                {
                    $compilar="bueno";
                    //echo "holas1";
                if( CantidadDirencia("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/",$titulo) == 0)
                    {
                   // echo "holas2";
-                   $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
-                    pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,100,'yes');";
-                   $categoria=pg_query($respuesta);
+                   $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (1,$id_usuario ,$titulo,'$texto','$fecha','$hora',100, 'yes' ,$timeEjecucion2);";
+                   pg_query($usuariosube);
                    echo "yes";
                      
                  }else{
@@ -97,67 +101,30 @@ class Juzgar
                      if(leerWronGanswer("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/") >0)
                      {
                         
-                         $usuariosube="insert into solucion_olimpista(id_lenguaje,id_usuario,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,$id_usuario,1,'$texto',$titulo);";
-                    pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                    $porsentage=calificarPregunta("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/",$titulo);                   
-                   
-                   
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,$porsentage,'RUNTIME ERROR');";
-                   $categoria=pg_query($respuesta);
-                  
-                         echo "RUNTIME ERROR";
+                     $porsentage=calificarPregunta("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/",$titulo,$id_usuario);                       
+                     $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (1,$id_usuario ,$titulo,'$texto','$fecha','$hora',$porsentage, 'WRONG ANSWER' ,$timeEjecucion2);";
+                     pg_query($usuariosube);
+                     echo "WRONG ANSWER";
                      }
-                     
                      if(leerWronGanswer("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/")==0)
                      {
-                         $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
-                    pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,0,'WRONG ANSWER');";
-                   $categoria=pg_query($respuesta);
+                        $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (1,$id_usuario ,$titulo,'$texto','$fecha','$hora',0, 'OUTPUT FORMAT ERROR' ,$timeEjecucion2);";
+                        pg_query($usuariosube);
+                   
                         
-                            echo "WRONG ANSWER";
+                           echo "OUTPUT FORMAT ERROR";
                      } 
                      }else{
-                              $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
+                    $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (1,$id_usuario ,$titulo,'$texto','$fecha','$hora',0, 'RUNTIME ERROR' ,$timeEjecucion2);";
                     pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,0,'OUTPUT FORMAT ERROR');";
-                   $categoria=pg_query($respuesta);
-                  
-                   
-                         echo "OUTPUT FORMAT ERROR";
+                    echo "RUNTIME ERROR";
+                        
                      }
                      
                  }
                }else{
-                        $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
+                     $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (1,$id_usuario ,$titulo,'$texto','$fecha','$hora',0, 'exsepcion time' ,$timeEjecucion2);";
                     pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,0,'exsepcion time');";
-                   $categoria=pg_query($respuesta);
-                  
                    echo "exsepcion time";
                }
             }
@@ -175,19 +142,19 @@ class Juzgar
             //$texto = nl2br($texto);
             $nombreSinExtencion=explode(".",$CodigoFuente);
            
-            if(file_exists("$nombreSinExtencion[0].class") == 1)
+            if(file_exists("$nombreSinExtencion[0].exe") == 1)
             {
                  //echo "$nombreSinExtencion[0].class";
                  
-                 unlink("$nombreSinExtencion[0].class");
+                 unlink("$nombreSinExtencion[0].exe");
                
             }
            // echo "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"; 
             
-            exec("powershell.exe javac $CodigoFuente");
+            exec("powershell.exe gcc -o $CodigoFuente $nombreSinExtencion[0]");
            // exec("java principal < ../archivo/problema/1/1.in  >../archivo/olimpista/1/1.out");
            //echo file_exists("$nombreSinExtencion[0].class");
-            if(file_exists("$nombreSinExtencion[0].class") == 1)  
+            if(file_exists("$nombreSinExtencion[0].exe") == 1)  
             { 
                 $compilar="bueno";
                 $this->nombreArchivo = substr($CodigoFuente,0,strrpos($CodigoFuente, '.'));   
@@ -195,15 +162,25 @@ class Juzgar
                //echo ".........................".$nombreSinExtencion[0]."....................";  
                 $tipo1 = array ("in");
                 $tipo2 = array ("sol");
-               $entrada=listar_ficheros($tipo1,"../archivo_comite/1/");
+               $entrada=listar_ficheros($tipo1,"../archivo_comite/$titulo/");
+              for($i=0;$i<sizeof($entrada);$i++)
+              { 
+                  $crearArchivo1=explode(".",$entrada[$i]);
+              
+                  fopen("../archivo_olimpista/$id_usuario/$titulo/$crearArchivo1[0].sol", "w+");
+                 
+              }
+               
                $solucion=listar_ficheros($tipo2,"../archivo_olimpista/$id_usuario/$titulo/");
+               echo "$titulo";
                exec("powershell.exe  mkdir ../archivo_olimpista/$id_usuario/$titulo");
+               
              for($i=0;$i< sizeof($solucion);$i++)
                {
                 
                    $j=$i+1;
                 
-                exec( "java $nombreSinExtencion[0] < ../archivo_comite/$titulo/$entrada[$i]  >../archivo_olimpista/$id_usuario/$titulo/$solucion[$i]");
+                exec( "$nombreSinExtencion[0].exe < ../archivo_comite/$titulo/$entrada[$i]  >../archivo_olimpista/$id_usuario/$titulo/$solucion[$i]");
             
               // eliminafila("../archivo_olimpista/$titulo/$solucion[$i]");
                }
@@ -214,17 +191,8 @@ class Juzgar
                    //echo "holas1";
                if( CantidadDirencia("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/",$titulo) == 0)
                    {
-                  // echo "holas2";
-                   $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
+                   $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (2,$id_usuario ,$titulo,'$texto','$fecha','$hora',100, 'yes' ,$timeEjecucion);";
                     pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,100,'yes');";
-                   $categoria=pg_query($respuesta);
                    echo "yes";
                      
                  }else{
@@ -234,68 +202,31 @@ class Juzgar
                      if(leerWronGanswer("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/") >0)
                      {
                         
-                         $usuariosube="insert into solucion_olimpista(id_lenguaje,id_usuario,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,$id_usuario,1,'$texto',$titulo);";
-                    pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                    $porsentage=calificarPregunta("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/",$titulo);                   
-                   
-                   
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,$porsentage,'RUNTIME ERROR');";
-                   $categoria=pg_query($respuesta);
-                  
-                         echo "RUNTIME ERROR";
+                         $porsentage=calificarPregunta("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/",$titulo,$id_usuario);                       
+                         $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (2,$id_usuario ,$titulo,'$texto','$fecha','$hora',$porsentage, 'WRONG ANSWER' ,$timeEjecucion);";
+                          pg_query($usuariosube);
+                         echo "WRONG ANSWER";
+                 
                      }
                      
                      if(leerWronGanswer("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/")==0)
                      {
-                         $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
-                    pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,0,'WRONG ANSWER');";
-                   $categoria=pg_query($respuesta);
-                        
-                            echo "WRONG ANSWER";
+                       $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (2,$id_usuario ,$titulo,'$texto','$fecha','$hora',0, 'OUTPUT FORMAT ERROR' ,$timeEjecucion);";
+                        pg_query($usuariosube);
+                        echo "OUTPUT FORMAT ERROR";
                      } 
                      }else{
-                              $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
+                     $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (2,$id_usuario ,$titulo,'$texto','$fecha','$hora',0, 'RUNTIME ERROR' ,$timeEjecucion);";
                     pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,0,'OUTPUT FORMAT ERROR');";
-                   $categoria=pg_query($respuesta);
-                  
-                   
-                         echo "OUTPUT FORMAT ERROR";
+                    echo "RUNTIME ERROR";
                      }
                      
                  }
                }else{
-                        $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
-                    pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,0,'exsepcion time');";
-                   $categoria=pg_query($respuesta);
-                  
+                   $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (2,$id_usuario ,$titulo,'$texto','$fecha','$hora',0, 'exsepcion time' ,$timeEjecucion);";
+                   pg_query($usuariosube);
                    echo "exsepcion time";
+                  
                }
             }
         }else{
@@ -321,7 +252,7 @@ class Juzgar
             }
            // echo "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"; 
             
-            exec("powershell.exe javac $CodigoFuente");
+            exec("g++ -o $CodigoFuente $nombreSinExtencion[0]");
            // exec("java principal < ../archivo/problema/1/1.in  >../archivo/olimpista/1/1.out");
            //echo file_exists("$nombreSinExtencion[0].class");
             if(file_exists("$nombreSinExtencion[0].class") == 1)  
@@ -332,15 +263,25 @@ class Juzgar
                //echo ".........................".$nombreSinExtencion[0]."....................";  
                 $tipo1 = array ("in");
                 $tipo2 = array ("sol");
-               $entrada=listar_ficheros($tipo1,"../archivo_comite/1/");
+               $entrada=listar_ficheros($tipo1,"../archivo_comite/$titulo/");
+              for($i=0;$i<sizeof($entrada);$i++)
+              { 
+                  $crearArchivo1=explode(".",$entrada[$i]);
+              
+                  fopen("../archivo_olimpista/$id_usuario/$titulo/$crearArchivo1[0].sol", "w+");
+                 
+              }
+               
                $solucion=listar_ficheros($tipo2,"../archivo_olimpista/$id_usuario/$titulo/");
+               echo "$titulo";
                exec("powershell.exe  mkdir ../archivo_olimpista/$id_usuario/$titulo");
+               
              for($i=0;$i< sizeof($solucion);$i++)
                {
                 
                    $j=$i+1;
                 
-                exec( "java $nombreSinExtencion[0] < ../archivo_comite/$titulo/$entrada[$i]  >../archivo_olimpista/$id_usuario/$titulo/$solucion[$i]");
+                exec( "$nombreSinExtencion[0].exe < ../archivo_comite/$titulo/$entrada[$i]  >../archivo_olimpista/$id_usuario/$titulo/$solucion[$i]");
             
               // eliminafila("../archivo_olimpista/$titulo/$solucion[$i]");
                }
@@ -349,19 +290,10 @@ class Juzgar
                {
                    $compilar="bueno";
                    //echo "holas1";
-               if( CantidadDirencia("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/",$titulo) == 0)
+              if( CantidadDirencia("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/",$titulo) == 0)
                    {
-                  // echo "holas2";
-                   $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
+                   $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (3,$id_usuario ,$titulo,'$texto','$fecha','$hora',100, 'yes' ,$timeEjecucion);";
                     pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,100,'yes');";
-                   $categoria=pg_query($respuesta);
                    echo "yes";
                      
                  }else{
@@ -371,70 +303,33 @@ class Juzgar
                      if(leerWronGanswer("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/") >0)
                      {
                         
-                         $usuariosube="insert into solucion_olimpista(id_lenguaje,id_usuario,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,$id_usuario,1,'$texto',$titulo);";
-                    pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                    $porsentage=calificarPregunta("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/",$titulo);                   
-                   
-                   
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,$porsentage,'RUNTIME ERROR');";
-                   $categoria=pg_query($respuesta);
-                  
-                         echo "RUNTIME ERROR";
+                         $porsentage=calificarPregunta("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/",$titulo,$id_usuario);                       
+                         $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (3,$id_usuario ,$titulo,'$texto','$fecha','$hora',$porsentage, 'WRONG ANSWER' ,$timeEjecucion);";
+                          pg_query($usuariosube);
+                         echo "WRONG ANSWER";
+                 
                      }
                      
                      if(leerWronGanswer("../archivo_olimpista/$id_usuario/$titulo/", "../archivo_comite/$titulo/")==0)
                      {
-                         $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
-                    pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,0,'WRONG ANSWER');";
-                   $categoria=pg_query($respuesta);
-                        
-                            echo "WRONG ANSWER";
+                       $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (3,$id_usuario ,$titulo,'$texto','$fecha','$hora',0, 'OUTPUT FORMAT ERROR' ,$timeEjecucion);";
+                        pg_query($usuariosube);
+                        echo "OUTPUT FORMAT ERROR";
                      } 
                      }else{
-                              $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
+                     $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (3,$id_usuario ,$titulo,'$texto','$fecha','$hora',0, 'RUNTIME ERROR' ,$timeEjecucion);";
                     pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,0,'OUTPUT FORMAT ERROR');";
-                   $categoria=pg_query($respuesta);
-                  
-                   
-                         echo "OUTPUT FORMAT ERROR";
+                    echo "RUNTIME ERROR";
                      }
                      
                  }
                }else{
-                        $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'$texto',$titulo);";
-                    pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,0,'exsepcion time');";
-                   $categoria=pg_query($respuesta);
-                  
+                   $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (3,$id_usuario ,$titulo,'$texto','$fecha','$hora',0, 'exsepcion time' ,$timeEjecucion);";
+                   pg_query($usuariosube);
                    echo "exsepcion time";
+                  
                }
-            }
+            }//------------------------------------------------////////////////*/*/*/
         }else{
             echo "archivos no exiten";
             $bandera=false;
@@ -443,23 +338,15 @@ class Juzgar
         
         if($compilar=="falla" && $bandera==true)
         {
-          $usuariosube="insert into solucion_olimpista(id_lenguaje,id_problema,texto_solucion_olimpista,codigo_solucion_olimpista) values (1,1,'bueno',$titulo);";
+                    $usuariosube="insert into solucion_olimpista(id_lenguaje, id_usuario ,id_problema, texto_solucion_olimpista, fecha_subida, hora_subida, calificacion_olimpista, mensage_calificacion, tiempo_ejecucion_olimpista) values (3,$id_usuario ,$titulo,'$texto','$fecha','$hora',0,'error compilar' ,0);";
                     pg_query($usuariosube);
-                   $ultimo="SELECT solucion_olimpista.id_solucion_olimpista FROM public.solucion_olimpista;";
-                   $ultimodato=pg_query($ultimo);
-                   while($arreglo = pg_fetch_array($ultimodato))
-                    {
-                        $num = $arreglo['id_solucion_olimpista'];
-                    }
-                   $respuesta="insert into calificacion(id_solucion_olimpista,nota_calificacion ,mensaje_calificacion) values ($num,0,'error compilar');";
-                   $categoria=pg_query($respuesta);   
                     echo ".....error compilar";   
         }
   
    // echo "hola";
-    // header( "Status: 301 Moved Permanently", false, 1000);
-     //header("Location: ../vista/suvirProblemaJuez.php");
-     exit();
+   // header( "Status: 301 Moved Permanently", false, 1000);
+  //  header("Location: ../vista/problemaResueltoUsuario.php");
+     //exit();
       
 
         //return $this->mensaje;
@@ -553,16 +440,16 @@ function leerWronGanswer($archivo1, $archivo2)
     
 }
 
-function calificarPregunta($archivo1, $archivo2,$titu)
+function calificarPregunta($archivo1, $archivo2,$titu,$idUser)//---------------------------------------------
 {
    
     $contar=0;
-    $nota=0;
+    $nota1=0;
     $linea=0;
     $tipo1 = array ("sol");
        $tipo2 = array ("out");
      $solucion=listar_ficheros ($tipo1, $archivo1);//olimpista
-    $salida=listar_ficheros ($tipo2, $archivo2);//problema
+    $salida=listar_ficheros ($tipo2, $archivo2);//problema comite
     $porsentage=0;
     for($j=0; $j< sizeof($solucion); $j++ )
     {
@@ -571,15 +458,14 @@ function calificarPregunta($archivo1, $archivo2,$titu)
     //$nombre_fichero = ‘fichero.txt’;
     //$fichero = fopen($nombre_fichero,'rb'');
    
-    while ( ($linea1 = fgets($file1)) !== false && ($linea2 = fgets($file2)) !== false  ) {
+        $nota=puntageNota($titu,$salida[$j]);
+        
+    while ( ($linea1 = fgets($file1)) !== false && ($linea2 = fgets($file2)) !== false  ) 
+        {
     
         if($linea1==$linea2)
         {
            $contar++;
-        }else{
-            
-          // echo "   ".$contar;
-            
         }
         $linea++;
         
@@ -588,16 +474,42 @@ function calificarPregunta($archivo1, $archivo2,$titu)
     fclose($file1);
     fclose($file2);
     
-    $porsenta=($contar*100)/$linea;
-    $nota=$nota+$porsenta;
+    $puntage=($nota*$contar)/$linea;
+    $porsentage=($puntage*100)/$nota;
     
+    $nota1=$nota1+$porsentage;
+    $contar=0; 
+    $linea=0;
     }
-    $porsentage=($nota/sizeof($solucion));
-    
-    return $porsentage;
+    $notafinal=$nota1/sizeof($solucion);
+    echo "----*$notafinal*-----";
+    return $notafinal;
     
 }
 
+function puntageNota($titulo,$outArchivo)//********************************************
+{
+    
+    $nombreArchivoSinpunto=explode(".",$outArchivo);
+    
+    $nombreArchivo=$nombreArchivoSinpunto[0].$nombreArchivoSinpunto[1];
+    
+    $notaOut="SELECT 
+  archivo.puntos_archivo
+FROM 
+  public.archivo
+where
+archivo.id_problema=$titulo and
+archivo.nombre_archivo='$nombreArchivo'
+order by 
+nombre_archivo
+  ;";
+    $notaProblema=  pg_query($notaOut);
+    
+    $puntage= pg_fetch_array($notaProblema);
+    
+    return $puntage[0];
+}
     function leerOutputFormatError($archivo1,$archivo2,$num)
     {
     $res="yes";
@@ -618,13 +530,18 @@ function calificarPregunta($archivo1, $archivo2,$titu)
     {
     while ( ($linea1 = fgets($file1)) !== false && ($linea2 = fgets($file2)) !== false  ) {
     $contar1++;
-    
+     echo "--------------------";
         if($linea1!==$linea2)
         {
            
             if(limpia_espacios($linea1) == $linea2)
-                {    // echo "me despido";    
+                {     echo "me despido";    
                   $contar++;
+                }
+                if(limpia_espacios($linea1)=="" && $linea2 !== "")
+                {
+                    $res="formato";
+                   // echo "--------------------";
                 }
         }
     }
@@ -632,6 +549,7 @@ function calificarPregunta($archivo1, $archivo2,$titu)
     }else{
         $contar=-1;
         $i=sizeof($solucion)+1;
+        $res="formato";
     }
     fclose($file1);
     fclose($file2);
@@ -817,6 +735,7 @@ function eliminafila($archivo)
 
 function exiteArchivo($archivo,$nombre)
 {
+    echo "hola";
     $directorio=opendir($archivo); 
     $res=false;
   while ($archivo = readdir($directorio))

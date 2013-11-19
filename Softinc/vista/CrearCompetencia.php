@@ -6,12 +6,14 @@
         <script type="text/javascript" src="../vista/js/1.js"></script>
     </head>
     <body>
-        <form action="../controlador/CrearCompetencia.php" method="post">
+        <form action="../controlador/CrearCompetencia.php" method="post" onsubmit="return fechas();">
         <h1>Cree una nueva competencia</h1>
         Nombre de la competencia:<input type="text"             name="nombre_competencia"><br>
-        Fecha de inicio:<input type="date" id='inputField'      name="fecha_inicio"><br>
-        Hora de inicio:<input type="text" id='hora'         name="hora" onKeyPress="return FormatoHora(event,this)"><br>
-        Duracion:<input type="text" id='duracion'         name="duracion" onKeyPress="return FormatoHora(event,this)"><br>
+        Fecha de inicio:<input type="date" id='fecha_inicio'      name="fecha_inicio"><br>
+        Hora de inicio:<input type="text" id='hora'         name="hora_ini" onKeyPress="return FormatoHora(event,this)"><br>
+        Fecha de fin:<input type="date" id='fecha_fin'      name="fecha_fin"><br>
+        hora de fin:<input type="text" id='duracion'         name="hora_fin" onKeyPress="return FormatoHora(event,this)"><br>
+        
         <input type="submit" value="Crear Competencia">
         </form>
     </body>
