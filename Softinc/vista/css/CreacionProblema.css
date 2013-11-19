@@ -1,0 +1,29 @@
+
+#formulario{
+        width: 400px;
+	height: 280px;
+        margin: 0 auto;
+        background: #B0E0E6; 
+        border: 2px;
+       
+}
+#formulario form{
+    padding: 10px ;
+}
+#formularioEliminar{
+    	width: 940px;
+	margin: 0 auto;
+	padding: 0px 0px 0px 40px;
+	background: url(../vista/images/img03.gif) repeat-y left top;
+}
+#formularioADD{
+        width: 500px;
+	height: 600px;
+        margin: 0 auto;
+        background: #B0E0E6; 
+        border: 2px;
+       
+}
+form{
+    padding: 20px ;
+}
