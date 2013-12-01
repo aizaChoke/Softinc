@@ -1,3 +1,0 @@
-chau
-amor
-saludoamorsito
