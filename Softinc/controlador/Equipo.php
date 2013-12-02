@@ -173,10 +173,11 @@ if(isset($_POST['agregar_usuario'])){
 
 if(isset($_POST['eliminarUsuario'])){ //Eliminar usuarios de un equipo (modificar equipo)
     require '../modelo/ConsultaEquipo.php';
-    $nombreEquipo=  $_POST['eliminarUsuario'];
+    $id_equipo=  $_POST['eliminarUsuario'];
     $contenedor  =  array();
-    $contenedor  =  explode("_", $nombreEquipo);
-    $nombreEquipo=  $contenedor[1];
+    $contenedor  =  explode("_", $id_equipo);
+    $id_equipo=  $contenedor[1];
+    $nombreEquipo=  $contenedor[2];
     $consulta    =  new ConsultaEquipo();
     require '../vista/equipoUsuariosEliminar.php';
 }
@@ -187,6 +188,7 @@ if(isset($_POST['eliminar_usuario'])){
     $consulta       =   new ConsultaEquipo();
     $idesUsuarios   =   array();
     $nombreEquipo   =   $_POST['nombreEquipo'];
+    $id_equipo      =   $_POST['id_equipo'];
     $idesUsuarios   =   $_POST['Contenedor'];
     foreach ($idesUsuarios as $id) {
         $eliminar   =   "DELETE FROM equipo_usuario
@@ -204,10 +206,11 @@ if(isset($_POST['eliminar_usuario'])){
 //modificar competencia
 if(isset($_POST['add_problema'])){
     
-    $id_competencia     =$_POST['add_problema'];
+    $id_competencia     =  $_POST['add_problema'];
     $contenedor         =  array();
     $contenedor         =  explode("_", $id_competencia);
     $id_competencia     =  $contenedor[1];
+    $nombre_competencia =  $contenedor[2];
     require '../vista/ContenidoCompetencia.php';
 }
 

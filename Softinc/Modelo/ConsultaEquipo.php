@@ -164,7 +164,7 @@ class ConsultaEquipo {
                <td>'.$line['id_equipo'].'</td> 
                <td>'.$line['nombre_equipo'].'</td>
                <td><input type="submit" name="agregarUsuarios"  value="Agregar Usuarios  _'.$line['nombre_equipo'].'" style="width:115px"></td>
-               <td><input type="submit" name="eliminarUsuario"  value="Eliminar Usuarios  _'.$line['id_equipo'].'" style="width:115px"></td>
+               <td><input type="submit" name="eliminarUsuario"  value="Eliminar Usuarios  _'.$line['id_equipo'].'_'.$line['nombre_equipo'].'" style="width:115px"></td>
                <td><input type="submit" name="verUsuarios"      value="Ver Usuarios  _'.$line['id_equipo'].'" style="width:90px"></td>
                </tr>'; 
         }  

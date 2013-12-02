@@ -74,11 +74,12 @@ class ConsultaCompetencia {
         for($i=0;$i<=$columnas-1; $i++){
             $line = pg_fetch_array($result, null, PGSQL_ASSOC);
              $this->formu.='<tr>
-                             <td>'.$line['id_competencia'].'</td> <td>'.$line['nombre_competencia'].'</td>
+                             <td>'.$line['id_competencia'].'</td> 
+                             <td>'.$line['nombre_competencia'].'</td>
                              <td>'.$line['fecha_inicio_competencia'].'</td> 
                              <td>'.$line['fecha_fin_competencia'].'</td> 
-                             <td> <input type="submit" name="add_problema" value="Agregar   _'.$line['id_competencia'].'"   style="width:65px"> </td> 
-                             <td> <input type="submit" name="add_equipo"   value="Eliminar  _'.$line['id_competencia'].'"  style="width:65px"> </td> 
+                             <td> <input type="submit" name="add_problema" value="Agregar   _'.$line['id_competencia'].'_'.$line['nombre_competencia'].'"   style="width:65px"> </td> 
+                             <td> <input type="submit" name="add_equipo"   value="Eliminar  _'.$line['id_competencia'].'_'.$line['nombre_competencia'].'"  style="width:65px"> </td> 
                                  
 
                             </tr>';                                                                                                                                                                    
@@ -114,7 +115,11 @@ $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competenci
         for($i=0;$i<=$columnas-1; $i++){
             $line = pg_fetch_array($result, null, PGSQL_ASSOC);
              $this->formu.='<tr>
-                             <td>'.$line['id_competencia'].'</td> <td>'.$line['nombre_competencia'].'</td><td>'.$line['fecha_inicio_competencia'].'</td> <td>'.$line['fecha_fin_competencia'].'</td> <td><input type="submit" name="competencia"  style="width:100px" value="Ver problemas  _'.$line['id_competencia'].'"></td>                                    
+                             <td>'.$line['id_competencia'].'</td> 
+                             <td>'.$line['nombre_competencia'].'</td>
+                             <td>'.$line['fecha_inicio_competencia'].'</td> 
+                             <td>'.$line['fecha_fin_competencia'].'</td> 
+                             <td><input type="submit" name="competencia"  style="width:100px" value="Ver problemas  _'.$line['id_competencia'].'_'.$line['nombre_competencia'].'"></td>                                    
                             </tr>';                                                                                                                                                                    
         }  
         $this->formu.='</table>';
@@ -176,7 +181,11 @@ $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competenci
         for($i=0;$i<=$columnas-1; $i++){
             $line = pg_fetch_array($result, null, PGSQL_ASSOC);
              $this->formu.='<tr>
-                             <td>'.$line['id_competencia'].'</td> <td>'.$line['nombre_competencia'].'</td><td>'.$line['fecha_inicio_competencia'].'</td> <td>'.$line['fecha_fin_competencia'].'</td>                                 
+                             <td>'.$line['id_competencia'].'</td> 
+                             <td>'.$line['nombre_competencia'].'</td>
+                             <td>'.$line['fecha_inicio_competencia'].'</td> 
+                             <td>'.$line['fecha_fin_competencia'].'</td>
+                             <td><input type="submit" name="competencia"  style="width:100px" value="Ver problemas  _'.$line['id_competencia'].'_'.$line['nombre_competencia'].'"></td>
                             </tr>';                                                                                                                                                                    
         }  
         $this->formu.='</table>';

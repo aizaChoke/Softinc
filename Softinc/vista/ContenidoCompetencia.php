@@ -18,6 +18,8 @@
                 
                     include '../Modelo/Consulta.php';
                     $con=new Consulta();
+                    echo "<strong>Competencia:  $nombre_competencia </strong>"; 
+                    echo '<input type="hidden" value='.$nombre_competencia.' name="nombre_competencia" >';
                     echo '<input type="hidden" value='.$id_competencia.' name="idCompetencia" >';
                     echo $con->generarArchivos();     
                 ?>
