@@ -4,8 +4,10 @@ $competencia=$_POST['competencia'];
  $contenedor         =  array();
  $contenedor         =  explode("_", $competencia);
  $id_problema        =  $contenedor[1];
+ $nombre_competencia =  $contenedor[2];
 require '../modelo/ConsultaCompetencia.php';
 $consulta=new ConsultaCompetencia();
+echo "<h3>Competencia:  $nombre_competencia </h3>"; 
 echo $consulta->generarProblemasCompetencia($id_problema);
 }
 

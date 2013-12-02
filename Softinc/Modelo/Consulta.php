@@ -218,7 +218,7 @@ function generarTablaEliminarProblema(){
                $this->formu.='<tr>             
                <td>'.$line['id_problema'].'</td> 
                <td>'.$line['nombre_problema'].'</td>
-               <td><input type="submit" name="ide_problema"  value="Subir archivos  _'.$line['id_problema'].'" style="width:95px"></td>
+               <td><input type="submit" name="ide_problema"  value="Subir archivos  _'.$line['id_problema'].'_'.$line['nombre_problema'].'" style="width:95px"></td>
                </tr>';
              
         }  

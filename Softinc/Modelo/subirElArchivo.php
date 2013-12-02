@@ -6,10 +6,10 @@
     $titulo=$_POST['titulo'];
     $tipoCodigo=$_POST['tipoCodigo'];
     $tipoSolucion=$_POST['tipoSolucion'];
-    
+    $formaDesubir=$_POST['subir'];
     
        $idCompetencia= $_POST['idCompetencia'];
-   if(isset($_POST['codigoFuente']))
+   if($formaDesubir=="Escriba codigo")
    {
     $codigoFuente=$_POST['codigoFuente'];
    }else{
@@ -36,7 +36,7 @@
             $destino = $nombreArchivo;
             copy($_FILES['programa']['tmp_name'],$destino);
             $puntoArchivo   =end(explode('.',$nombreArchivo)); //cortamos para obtener solamente el formato
-       // echo "------------------- $puntoArchivo";
+      // echo "------------------- $puntoArchivo";
             if(in_array($puntoArchivo, $formatPermitido)){ //verifica si es un programa
        
                       ?>
@@ -56,9 +56,8 @@
         }
         }else{
             echo "ponga el codigo del problema";
-            include '../vista/suvirProblemaJuez.php';
             header( "Status: 301 Moved Permanently", false, 301);
-            header("Location: ../vista/presentarSolucionz.php");
+            header("Location: ../vista/presentarSolucion.php");
 		exit();  
         }
     }else{ 

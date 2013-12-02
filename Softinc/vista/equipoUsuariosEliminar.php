@@ -7,11 +7,13 @@
     </head>
     <body>
         <form action="../controlador/Equipo.php" method="post">
-        <h1>Usuarios</h1>
+        
        
         <?php
+        echo "<h3>SELECCIONE A LOS USUARIOS QUE DESEA ELIMINAR DEL EQUIPO:  $nombreEquipo </h3>"; 
         echo '<input type="hidden" value='.$nombreEquipo.' name="nombreEquipo" >';
-        echo $consulta->generarTablaUsuariosEquipos2($nombreEquipo);
+        echo '<input type="hidden" value='.$id_equipo.' name="id_equipo" >';
+        echo $consulta->generarTablaUsuariosEquipos2($id_equipo);
         ?>
         <input type="submit" value="Eliminar" name="eliminar_usuario">
         </form>

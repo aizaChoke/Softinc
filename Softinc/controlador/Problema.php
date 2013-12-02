@@ -80,6 +80,7 @@ if(isset($_POST['ide_problema'])){ //subir archivos a un problema existente
     $id_problema=$_POST['ide_problema'];
     $contenedor = explode('_', $id_problema); 
     $id_problema = $contenedor[1]; //id_problema es el id que se le manda a la clase de agregarArchivos.php
+    $nombreProblema = $contenedor[2];
     session_start();
     require '../vista/AgregarArchivos.php';
     
