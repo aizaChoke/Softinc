@@ -7,6 +7,7 @@
         <title></title>
     </head>
     <body>
+        <div id="formulario">
         <h2>COMPETENCIAS PASADAS</h2>
         <form method="post" action="../controlador/Competencia.php">
         <?php 
@@ -15,6 +16,6 @@
         echo $competencia->anteriorCompetencia();
         ?>
         </form>
-
+        </div>
     </body>
 </html>

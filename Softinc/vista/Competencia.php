@@ -5,6 +5,7 @@
         <link rel="StyleSheet" href="../vista/css/Decoracion.css" type="text/css">
     </head>
     <body>
+        <div id="formulario">
         <h2>COMPETENCIAS</h2>
         <form action="../controlador/Competencia.php" method="post">
                 <?php 
@@ -13,5 +14,6 @@
                     echo    $consul->ListaCompetencia();
                 ?>
         </form>
+        </div>
     </body>
 </html>

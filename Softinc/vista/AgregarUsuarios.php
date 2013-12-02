@@ -6,6 +6,7 @@
         <link rel="StyleSheet" href="../vista/css/Decoracion.css" type="text/css">
     </head>
     <body>
+        <div id="formulario">
         <h2>SELECCIONE UN EQUIPO</h2>
         <form action="../controlador/Equipo.php" method="post">
                 <?php 
@@ -14,5 +15,6 @@
                     echo    $consul->generarEquiposAgregar();
                 ?>
         </form>
+        </div>
     </body>
 </html>

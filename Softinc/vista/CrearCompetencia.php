@@ -51,6 +51,7 @@
 </script>
     </head>
     <body>
+       
         <form action="../controlador/Competencia.php" method="post" onSubmit="return fechas();">
           
         <h1 align="center">Cree una nueva competencia</h1>
@@ -72,5 +73,6 @@
           <input type="submit" value="Crear Competencia" name="crear_competencia">
         </div>
         </form>
+        
     </body>
 </html>

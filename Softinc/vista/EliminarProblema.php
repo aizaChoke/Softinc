@@ -7,7 +7,7 @@
     </head>
     <body>
             <h2>SELECCIONE LOS PROBLEMAS QUE DESEA ELIMINAR</h2>
-         <div id="formularioEliminar">
+         <div id="formulario">
         <form method="post" action="../controlador/Problema.php" onsubmit="return clickEliminar()">
              <?php
              require  '../Modelo/Consulta.php';
