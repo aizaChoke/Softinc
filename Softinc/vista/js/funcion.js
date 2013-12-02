@@ -77,7 +77,7 @@ function validarUsuario()
           }
     
   
- return bandedera;
+ return bandera;
  }
     /*
     var url= 'validar usuario.php';
