@@ -51,13 +51,13 @@
 </script>
     </head>
     <body>
-       
         <form action="../controlador/Competencia.php" method="post" onSubmit="return fechas();">
           
         <h1 align="center">Cree una nueva competencia</h1>
         <div align="center">
           <table>  
-            <tr><td>Nombre de la competencia:</td></tr><tr><td><input type="text" size='35' min="1"            name="nombre_competencia" placeholder="Nombre de la competencia"></td></tr>
+            <tr><td>Nombre de la competencia:</td></tr><tr><td><input type="text" size='35' min="1"  id="nombre_competencia"  onBlur="existeCompencia(this)"        name="nombre_competencia" placeholder="Nombre de la competencia"></td></tr>
+            <tr><td><samp id="nombreCopetencia"></samp><br/></td></tr> 
             <tr><td>Fecha de inicio:</td></tr><tr><td><input type="text" size='35' min="1" id='fecha_inicio'    name="fecha_inicio" placeholder="Fecha creacion"></td></tr>
             <tr><td>Hora de inicio:</td></tr><tr><td><input type="text" size='35' min="1" id='hora_ini'             name="hora_ini" onKeyPress="return FormatoHora(event,this)"  placeholder="Hora inicio"></td></tr> 
             <tr><td>Fecha de fin:</td></tr><tr><td><input type="text" size='35' min="1" id='fecha_fin'          name="fecha_fin" placeholder="Fecha fin"><br>
@@ -73,6 +73,5 @@
           <input type="submit" value="Crear Competencia" name="crear_competencia">
         </div>
         </form>
-        
     </body>
 </html>

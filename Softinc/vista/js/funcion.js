@@ -185,3 +185,33 @@ function validarusuarioformulario(usuario)
 function desactivarCapoText(l_str_input) {
 document.getElementById("titulo").disabled = true;
 }
+
+function mostarDescripcion(mesage)
+{
+	var url ='js/mostrarDescripcion.php';
+      
+	var parametros='nombreP='+document.getElementById("titulo").value+'&id='+document.getElementById("idCompetencia").value;
+	 // alert ("dddddddddddddd");
+        var ajax = new Ajax.Updater('caso',url,{method: 'get', parameters: parametros});
+    
+}
+
+function existeProblema(mesage)
+{
+	var url ='js/existeProblemaBd.php';
+      
+	var parametros='nombreP='+document.getElementById("nombreProblema").value;
+	 // alert ("dddddddddddddd");
+        var ajax = new Ajax.Updater('conprobarProblema',url,{method: 'get', parameters: parametros});
+    
+}
+
+function existeCompencia(mesage)
+{
+	var url ='js/existeCompetenciaBd.php';
+      
+	var parametros='nombreC='+document.getElementById("nombre_competencia").value;
+	 // alert ("dddddddddddddd");
+        var ajax = new Ajax.Updater('nombreCopetencia',url,{method: 'get', parameters: parametros});
+    
+}
