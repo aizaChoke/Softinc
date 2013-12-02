@@ -6,6 +6,7 @@ class presentarCompetenciaConsulta
     
     public function __construct() {
         $lenguages=array();
+        $problemaCompetencia=array();
     }
     
     function lenguages($idCompetencia)
@@ -24,19 +25,28 @@ WHERE
         $lenguaguages=pg_query($sql);
         return $lenguaguages; 
     }
-}
 
-/*
-$dato= new presentarCompetenciaConsulta();
-$mensaje=$dato->lenguages(1);
 
-while($res=  pg_fetch_array($mensaje))
+function problemaCompetencia($idCompetencia)
 {
-    
-    echo $res['nombre_lenguaje'];
+    $sql2="SELECT 
+  competencia.id_competencia, 
+  competencia.nombre_competencia, 
+  problema.nombre_problema, 
+  competencia_problema.id_competencia_problema, 
+  problema.id_problema
+FROM 
+  public.competencia, 
+  public.problema, 
+  public.competencia_problema
+WHERE 
+  competencia_problema.id_competencia = competencia.id_competencia AND
+  competencia_problema.id_problema = problema.id_problema and 
+  competencia.id_competencia=$idCompetencia;
+
+        ";
+    $problema=pg_query($sql2);
+    return $problema;
 }
-{
-    
 }
-*/
 ?>

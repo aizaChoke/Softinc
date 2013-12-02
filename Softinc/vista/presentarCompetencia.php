@@ -6,7 +6,7 @@ require '../Modelo/datosPresentarCompetencia.php';
 
 $dato= new presentarCompetenciaConsulta();
 $mensaje=$dato->lenguages($idCompetencia);
-
+$problemaCo=$dato->problemaCompetencia($idCompetencia);
 
 ?>
 
@@ -18,7 +18,8 @@ $mensaje=$dato->lenguages($idCompetencia);
     <script>window.jQuery || document.write("<script src='js/jquery-1.5.1.min.js'>\x3C/script>")</script>
     <script src="js/app.js"></script>
     <link rel="stylesheet" href="css/skeleton.css">
-    
+    <script type="text/javascript" src="js/funcion.js"></script>
+ <script type="text/javascript" src="js/prototype.js"></script>
     
     
 </head>
@@ -45,9 +46,9 @@ $mensaje=$dato->lenguages($idCompetencia);
 	
             
              <?php  echo "<td><select name='tipoCodigo'>";
-		while($date = pg_fetch_array($mensaje))
+		while($dato = pg_fetch_array($mensaje))
  		{
-   			echo "<option >".$date['nombre_lenguaje']."</option>"; 
+   			echo "<option >".$dato['nombre_lenguaje']."</option>"; 
   		}
 		echo "</select>";
 	      echo "</td>";
@@ -58,7 +59,21 @@ $mensaje=$dato->lenguages($idCompetencia);
 <tr>
     <td>Codigo de problema :</td>
 </tr>
-   <?php echo "<tr><td><input type='text' id='titulo' name='titulo' value ='' size='40' maxlength='40' placeholder='codigo problema'  required /></td></tr>" ?>
+<tr>
+   <?php
+   
+              echo "<td><select name='titulo' id='titulo' onClick='mostarDescripcion(this)' >";
+		while($date = pg_fetch_array($problemaCo))
+ 		{
+                    
+   			echo "<option >".$date['id_problema']."</option>"; 
+  		}
+		echo "</select>";
+	      echo "</td>";
+              
+   ?>
+    </tr>
+<tr><td><samp id="caso"></samp><br/></td></tr>
 <tr> 
 	<td><input checked="checked"  type='radio' id="seleccion1" name='subir' size='40' maxlength='40' value='Escriba codigo' onClick="bloquea()" required /> Escriba codigo</td>
         <td><input  type='radio' id="seleccion2" name='subir' size='40' maxlength='40' value='Suba codigo' onClick="bloquea()" required /> Seleccionar archivo</td>
