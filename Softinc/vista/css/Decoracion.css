@@ -1,7 +1,11 @@
 table {
- 
+border: 2px groove;
 }
 td { 
-   
+border: 2px groove;
+ }
+ #formulario{
+margin:0 auto 0 auto;
+width:390px;
  }
 

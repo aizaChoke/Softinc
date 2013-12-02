@@ -7,8 +7,10 @@
         <link rel="StyleSheet" href="../vista/css/Decoracion.css" type="text/css">
     </head>
     <body>
+        
         <form action="../controlador/Competencia.php" method="post" onsubmit="return fechas();">
         <h1>Cree una nueva competencia</h1>
+        <div id="formulario">
         Nombre de la competencia:<input type="text"             name="nombre_competencia"><br>
         Fecha de inicio:<input type="date" id='fecha_inicio'    name="fecha_inicio"><br>
         Hora de inicio:<input type="text" id='hora_ini'             name="hora_ini" onKeyPress="return FormatoHora(event,this)"><br> 
@@ -21,6 +23,8 @@
                         c:   <input type="CHECKBOX" name="configurador[]" value='2'>
                         c++: <input type="CHECKBOX" name="configurador[]" value='3'><br>
         <input type="submit" value="Crear Competencia" name="crear_competencia">
+        </div>
         </form>
+        
     </body>
 </html>

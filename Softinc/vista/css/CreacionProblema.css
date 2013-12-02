@@ -17,9 +17,9 @@
 	background: url(../vista/images/img03.gif) repeat-y left top;
 }
 #formularioADD{
-        width: 500px;
+    margin:0 auto 0 auto;
+    width: 500px;
 	height: 800px;
-        margin: 0 auto;
         background: #B0E0E6; 
         border: 2px;
        

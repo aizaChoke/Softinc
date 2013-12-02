@@ -5,6 +5,7 @@ session_start();
     <head>
         <title></title>
         <script type="text/javascript" src="../vista/js/funcion.js"></script>
+         <link rel="StyleSheet" href="../vista/css/Decoracion.css" type="text/css">
         <link rel="stylesheet" href="css/base.css">
         <link rel="stylesheet" href="css/skeleton.css">
         <link rel="stylesheet" href="css/layout.css">

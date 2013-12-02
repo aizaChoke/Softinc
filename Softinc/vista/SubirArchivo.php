@@ -7,12 +7,15 @@
     </head>
     <body>
         <h2>SUBIR ACHIVOS DE ENTRADA Y SALIDA A SUS PROBLEMAS</h2>
+        <div id="formulario">
         <form action="../controlador/Problema.php" method="post">
 <?php 
 require '../modelo/Consulta.php';
 $consul=new Consulta();
 echo $consul->generarArchivosSubidosComite2();
 ?>
+        
         </form>
+        </div>   
     </body>
 </html>
