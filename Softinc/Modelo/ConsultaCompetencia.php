@@ -69,7 +69,8 @@ class ConsultaCompetencia {
         $this->formu.='<td><h4>NOMBRE</h4></td>';
         $this->formu.='<td><h4>Fecha Inicio</h4></td>';
         $this->formu.='<td><h4>Fecha final</h4></td>';
-        $this->formu.='<td><h4>Ver</h4></td>';
+        $this->formu.='<td><h4>Agregar problemas y equipos</h4></td>';
+        $this->formu.='<td><h4>Eliminar problemas y equipos</h4></td>';
         $this->formu.='</tr>';
         for($i=0;$i<=$columnas-1; $i++){
             $line = pg_fetch_array($result, null, PGSQL_ASSOC);
@@ -78,10 +79,8 @@ class ConsultaCompetencia {
                              <td>'.$line['nombre_competencia'].'</td>
                              <td>'.$line['fecha_inicio_competencia'].'</td> 
                              <td>'.$line['fecha_fin_competencia'].'</td> 
-                             <td> <input type="submit" name="add_problema" value="Agregar   _'.$line['id_competencia'].'_'.$line['nombre_competencia'].'"   style="width:65px"> </td> 
-                             <td> <input type="submit" name="add_equipo"   value="Eliminar  _'.$line['id_competencia'].'_'.$line['nombre_competencia'].'"  style="width:65px"> </td> 
-                                 
-
+                             <td> <input type="submit" name="add_problema"            value="Agregar   _'.$line['id_competencia'].'_'.$line['nombre_competencia'].'"   style="width:65px"> </td> 
+                             <td> <input type="submit" name="eliminarDeCompetencia"   value="Eliminar  _'.$line['id_competencia'].'_'.$line['nombre_competencia'].'"  style="width:65px"> </td> 
                             </tr>';                                                                                                                                                                    
             }  
         $this->formu.='</table>';
@@ -150,7 +149,11 @@ $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competenci
         for($i=0;$i<=$columnas-1; $i++){
             $line = pg_fetch_array($result, null, PGSQL_ASSOC);
              $this->formu.='<tr>
-                             <td>'.$line['id_competencia'].'</td> <td>'.$line['nombre_competencia'].'</td><td>'.$line['fecha_inicio_competencia'].'</td> <td>'.$line['fecha_fin_competencia'].'</td> <td><input type="button" href="javascript:;" style="width:100px" onclick="realizaProceso('.$line['id_competencia'].');return false;" value="Ver problemas  _'.$line['id_competencia'].'"/></td>                                    
+                             <td>'.$line['id_competencia'].'</td> 
+                             <td>'.$line['nombre_competencia'].'</td>
+                             <td>'.$line['fecha_inicio_competencia'].'</td> 
+                             <td>'.$line['fecha_fin_competencia'].'</td> 
+                             <td><input type="button" href="javascript:;" style="width:100px" onclick="realizaProceso('.$line['id_competencia'].');return false;" value="Ver problemas  _'.$line['id_competencia'].'"/></td>                                    
                             </tr>';                                                                                                                                                                    
             }  
         $this->formu.='</table>';
@@ -290,7 +293,8 @@ $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competenci
 
            return $this->formu;    
     }
-        function generarProblemasCompetencia($id_competencia){
+    
+        function generarProblemasCompetencia($id_competencia){  //sirve para descargar problemas
 
                                       
         include("../modelo/cnx.php");
@@ -311,7 +315,38 @@ $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competenci
                $this->formu.='<tr>             
                <td>'.$line['id_problema'].'</td> 
                <td>'.$line['nombre_problema'].'</td>
-               <td><a href="../archivo_comite/'.$line['id_problema'].'/'.$line['id_problema'].'.pdf">Descargar Enunciado</a></td><td><input type="hidden" value='.$line['id_problema'].' name="enviar_solucion" ></td><td><input type="submit" name="enviar_solucion"  value="enviar solucion" ></td>
+               <td><a href="../archivo_comite/'.$line['id_problema'].'/'.$line['id_problema'].'.pdf">Descargar Enunciado</a></td>
+               <td><input type="hidden" value='.$line['id_problema'].' name="enviar_solucion" ></td>
+               <td><input type="submit" name="enviar_solucion"  value="enviar solucion" ></td>
+               </tr>';
+        }  
+        $this->formu.='</table>';
+        return $this->formu;    
+
+    }
+    
+            function generarProblemasCompetencia2($id_competencia){  //sirve para competencias pasadas
+
+                                      
+        include("../modelo/cnx.php");
+        $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
+          //  session_start();
+          $seleccionar="SELECT problema.id_problema, id_usuario, nombre_problema
+                        FROM problema, competencia_problema
+                        where competencia_problema.id_problema=problema.id_problema
+                        and competencia_problema.id_competencia=".$id_competencia;
+    
+          $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
+          $columnas   = pg_numrows($result);
+        $this->formu.='<table>';
+        $this->formu.='<tr><td>Identificador</td>';
+        $this->formu.='<td>Nombre</td></tr>';
+        for($i=0;$i<=$columnas-1; $i++){
+            $line = pg_fetch_array($result, null, PGSQL_ASSOC);
+               $this->formu.='<tr>             
+               <td>'.$line['id_problema'].'</td> 
+               <td>'.$line['nombre_problema'].'</td>
+               <td><a href="../archivo_comite/'.$line['id_problema'].'/'.$line['id_problema'].'.pdf">Descargar Enunciado</a></td>
                </tr>';
         }  
         $this->formu.='</table>';
@@ -327,11 +362,16 @@ $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competenci
                   include("../modelo/cnx.php");
                   $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
                   session_start();
-                  $seleccionar="SELECT id_competencia_usuario, id_usuario, competencia.id_competencia,
-                                competencia.nombre_competencia, fecha_inicio_competencia, fecha_fin_competencia
-                                FROM competencia_usuario, competencia
-                                where competencia.id_competencia=competencia_usuario.id_competencia and id_usuario=".$_SESSION["id_usuario"];
-    
+                  $id_usuario=$_SESSION["id_usuario"];
+                  $seleccionar="SELECT competencia.id_competencia, competencia.nombre_competencia, fecha_inicio_competencia, fecha_fin_competencia
+                                FROM equipo_usuario, equipo, competencia_equipo, competencia, usuario
+                                where competencia.id_competencia=competencia_equipo.id_competencia and
+                                competencia_equipo.id_equipo=equipo.id_equipo and 
+                                equipo.id_equipo=equipo_usuario.id_equipo and
+                                equipo_usuario.id_usuario='$id_usuario'
+                                group by competencia.id_competencia, competencia.nombre_competencia, fecha_inicio_competencia, fecha_fin_competencia
+                                order by competencia.id_competencia desc";
+                                
                 $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
                 $columnas   = pg_numrows($result);
                 $this->formu.='<table><tr><td>Identificador</td>';
@@ -381,12 +421,82 @@ $seleccionar='SELECT id_competencia, nombre_competencia, fecha_inicio_competenci
                                    <td>'.$line['fecha_fin_competencia'].'</td>
                                    <td>'.$line['fecha_creacion'].'</td>
                                    <td><input type="submit" name="id_competencia"  value="Ver Equipos  _'.$line['id_competencia'].'"  style="width:85px"></td>
+                                   <td><input type="submit" name="competencia"  value="Ver Problemas  _'.$line['id_competencia'].'_'.$line['nombre_competencia'].'"  style="width:100px"></td>
                                    </tr>';
                 }
                 $this->formu.='</table>';
 
            return $this->formu;    
     }
+    
+    
+    
+    
+    
+       function listaProblemasCompetencia($competencia){ //lista problemas de un competencia
+                      
+        include("../modelo/cnx.php");
+        $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
+                  session_start();
+                  $seleccionar="SELECT  id_competencia_problema, problema.id_problema, id_competencia, nombre_problema
+                                FROM  competencia_problema, problema
+                                where competencia_problema.id_problema=problema.id_problema   and
+                                id_competencia=".$competencia;
+    
+                $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
+                $columnas   = pg_numrows($result);
+                $this->formu.='<table><tr><td>Identificador</td>';
+                $this->formu.='<td>Nombre Problema</td>';
+                for($i=0;$i<=$columnas-1; $i++){
+                     $line = pg_fetch_array($result, null, PGSQL_ASSOC);
+                    $this->formu.='<tr>             
+                                   <td>'.$line['id_problema'].'</td> 
+                                   <td>'.$line['nombre_problema'].'</td>
+                                   <td><input type="CHECKBOX" name="problemasCompetencia[]" value='.$line['id_problema'].'></td>
+                                   </tr>';
+                }
+                $this->formu.='</table>';
+
+           return $this->formu;    
+    }
+    
+    
+    
+    
+        function ListaEquiposDeCompetencia($id_competencia){ // genera una lista de equipo que pertenecen a una competencia   
+        include("cnx.php");
+        $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
+
+        $seleccionar='SELECT    id_competencia_equipo, equipo.id_equipo, id_competencia, nombre_equipo
+                        FROM    competencia_equipo, equipo
+                       where    equipo.id_equipo=competencia_equipo.id_equipo
+                                and competencia_equipo.id_competencia='.$id_competencia.'';
+        
+        $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
+        $columnas   = pg_numrows($result);
+        $this->formu.='<table>';
+        $this->formu.='<tr>
+                            <td>Identificador</td>
+                            <td>Nombre Equipo</td>
+                       </tr>';
+        for($i=0;$i<$columnas; $i++){
+            $line = pg_fetch_array($result, null, PGSQL_ASSOC);
+            $this->formu.='<tr>
+                                <td>'.$line['id_equipo'].'</td>
+                                <td>'.$line['nombre_equipo'].'</td>
+                                <td><input type="CHECKBOX" name="equiposCompetencia[]" value='.$line['id_equipo'].'></td>
+                           </tr>';
+        }   
+        $this->formu.='</table>';
+        return $this->formu;  
+    } 
+    
+    
+    
+    
+    
+    
+    
     
     
     

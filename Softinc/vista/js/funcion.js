@@ -38,7 +38,7 @@
     }   
     if(bandera==true)
     {
-        alert("C�digo subido exitosamente");
+        alert("Codigo subido exitosamente");
     }
 
    
@@ -188,10 +188,11 @@ document.getElementById("titulo").disabled = true;
 
 function mostarDescripcion(mesage)
 {
+    //alert ("dddddddddddddd");
 	var url ='js/mostrarDescripcion.php';
-      
+     // alert ("dddddddddddddd");
 	var parametros='nombreP='+document.getElementById("titulo").value+'&id='+document.getElementById("idCompetencia").value;
-	 // alert ("dddddddddddddd");
+	  
         var ajax = new Ajax.Updater('caso',url,{method: 'get', parameters: parametros});
     
 }

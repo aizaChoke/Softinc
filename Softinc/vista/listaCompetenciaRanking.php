@@ -1,5 +1,5 @@
 <body>
-<h1 align="center">Tabla competencia</h1>
+<h1 align="center">Resultado de competencia</h1>
     <div align="center">
   <?php
 include '../Modelo/cnx.php';
@@ -148,20 +148,37 @@ function listaCompetencia($idCompetencia)
   competencia.nombre_competencia, 
   competencia.fecha_inicio_competencia, 
   competencia.fecha_fin_competencia, 
-  rol.nombre_tipo
+  rol.nombre_tipo , 
+  count(*)
 FROM 
   public.usuario, 
-  public.competencia, 
-  public.competencia_usuario, 
+  public.usuario_rol, 
   public.rol, 
-  public.usuario_rol
+  public.competencia, 
+  public.equipo_usuario, 
+  public.equipo, 
+  public.competencia_equipo
 WHERE 
-  usuario.id_usuario = competencia_usuario.id_usuario AND
-  competencia_usuario.id_competencia = competencia.id_competencia AND
+  usuario.id_usuario = usuario_rol.id_usuario AND
+  usuario.id_usuario = equipo_usuario.id_usuario AND
   rol.id_rol = usuario_rol.id_rol AND
+  equipo_usuario.id_equipo = equipo.id_equipo AND
+  equipo.id_equipo = competencia_equipo.id_equipo AND
+  competencia_equipo.id_competencia = competencia.id_competencia AND
   usuario_rol.id_usuario = usuario.id_usuario and 
   rol.nombre_tipo='olimpista' and
-  competencia.id_competencia=$idCompetencia;
+  competencia.id_competencia=$idCompetencia
+ GROUP BY
+ usuario.id_usuario, 
+  usuario.nombre_usuario, 
+  usuario.apellido_usuario, 
+  usuario.user_usuario, 
+  competencia.id_competencia, 
+  competencia.nombre_competencia, 
+  competencia.fecha_inicio_competencia, 
+  competencia.fecha_fin_competencia, 
+  rol.nombre_tipo
+  ;
 ";
    $res= pg_query($sql);    
 

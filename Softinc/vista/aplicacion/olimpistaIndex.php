@@ -8,6 +8,7 @@
                     <li><a href="../tablaProblemaMasResueltos.php"   target="frame-principal">Ranking  problema mas faciles  </a></li>
                     <li><a href="../tablaProblemaMenosResueltos.php"  target="frame-principal">Ranking  problema mas complicadas </a></li>
                     <li><a href="../rankinGlobalGanador.php"  target="frame-principal">Ganador entrenamiento </a></li> 
+                    <li><a href="../estaditicasEntrenamiento.php"  target="frame-principal">Estadistica entrenamiento </a></li>
                  <h4>Competencias:</h4>
                   <li><a href="../CompetenciaActual.php"    target="frame-principal" >Competencia en Servicio</a></li>
                   <li><a href="../CompetenciaProxima.php"   target="frame-principal" >Competencia  proximas</a></li>

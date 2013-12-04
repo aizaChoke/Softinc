@@ -12,6 +12,7 @@ session_start();
                     <li><a href="../EliminarProblema.php" target="frame-principal">Eliminar problema</a></li>
                     <li><a href="../descargar_archivo.php" target="frame-principal">Ver problema</a></li>
                     <li><a href="../descargarProblemaComite.php" target="frame-principal">Descargar solucion</a></li>
+                    <li><a href="../estaditicasEntrenamiento.php"  target="frame-principal">Estadistica entrenamiento </a></li>
                     <h4>Competencias:</h4>
                     <li><a href="../CrearCompetencia.php"  target="frame-principal" >Crear</a></li>
                     <li><a href="../EditarCompetencia.php" target="frame-principal">Modificar Competencia</a></li>

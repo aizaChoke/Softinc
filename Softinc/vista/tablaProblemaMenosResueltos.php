@@ -9,23 +9,20 @@
 include '../Modelo/cnx.php';
 pg_connect($entrada);
 
-$sql="SELECT 
-  problema.nombre_problema
-FROM 
-  public.problema;
+$problemaMasDificiles=problemaMasdificiles();
 
-";
-$listaProble=  pg_query($sql);
+
+$listaProble=MaFaciles($problemaMasDificiles);
+
 $nombreproblema=array();
 $intentos=array();
 $pos=0;
-while($dato= pg_fetch_array($listaProble))
+for($i=0;$i<sizeof($listaProble);$i++)
 {
-    if(esDificl($dato['nombre_problema'])==true && $pos < 5)
-    {
-       $nombreproblema[]=$dato['nombre_problema'];
-       $intentos[]=intento($dato['nombre_problema']);       
-    }
+
+       $nombreproblema[]=$listaProble[$i];
+       $intentos[]=intento($listaProble[$i]);       
+    
     $pos++;
 }
 arsort($intentos);
@@ -48,7 +45,86 @@ foreach ($intentos as $key => $val)
     }
 echo "</table>";
 
+function MaFaciles($problemaMasDificiles)
+{
+    $sql="SELECT 
+  problema.id_problema, 
+  problema.nombre_problema, 
+  solucion_olimpista.tipo_solucion, 
+  solucion_olimpista.id_competencia_olimpista,
+  count(*)
+  
+FROM 
+  public.problema, 
+  public.solucion_olimpista
+WHERE 
+  problema.id_problema = solucion_olimpista.id_problema and
+  solucion_olimpista.tipo_solucion='entrenamiento' and 
+  solucion_olimpista.id_competencia_olimpista=0
+GROUP BY 
+  problema.id_problema, 
+  problema.nombre_problema, 
+  solucion_olimpista.tipo_solucion, 
+  solucion_olimpista.id_competencia_olimpista
+;
+";
+    $problemas=pg_query($sql);
+    $lista=array();
+    while($dato=  pg_fetch_array($problemas))
+    {
+     if(Esdificil($dato['nombre_problema'])==0)
+        {
+        $lista[]=$dato['nombre_problema'];
+        
+         }
+    }
+    return $lista;
+}
 
+function Esdificil($nombreProblema)
+{
+    $sql="SELECT 
+  problema.id_problema, 
+  problema.nombre_problema, 
+  solucion_olimpista.calificacion_olimpista, 
+  solucion_olimpista.tipo_solucion, 
+  solucion_olimpista.id_competencia_olimpista
+FROM 
+  public.solucion_olimpista, 
+  public.problema
+WHERE 
+  problema.id_problema = solucion_olimpista.id_problema AND
+  solucion_olimpista.calificacion_olimpista=100 and
+  solucion_olimpista.tipo_solucion='entrenamiento' AND
+  solucion_olimpista.id_competencia_olimpista=0 and
+  problema.nombre_problema='$nombreProblema';
+";
+  $lista=  pg_query($sql);
+  $cantidad=  pg_num_rows($lista);
+  return $cantidad;
+}
+
+function problemaMasdificiles()
+{
+    $sql="SELECT 
+  problema.id_problema, 
+  problema.nombre_problema, 
+  solucion_olimpista.calificacion_olimpista, 
+  solucion_olimpista.tipo_solucion, 
+  solucion_olimpista.id_competencia_olimpista
+FROM 
+  public.solucion_olimpista, 
+  public.problema
+WHERE 
+  problema.id_problema = solucion_olimpista.id_problema AND
+  solucion_olimpista.calificacion_olimpista=100 and
+  solucion_olimpista.tipo_solucion='entrenamiento' AND
+  solucion_olimpista.id_competencia_olimpista=0;
+";
+    $res=  pg_query($sql);
+    return $res;
+    
+}
 function esDificl($nombreproblema)
 {
   $sql="
@@ -64,7 +140,7 @@ WHERE
   problema.id_problema = solucion_olimpista.id_problema and
   solucion_olimpista.tipo_solucion='entrenamiento' and
   problema.nombre_problema = '$nombreproblema' and
-  solucion_olimpista.calificacion_olimpista > 0
+  solucion_olimpista.calificacion_olimpista < 100 
   
 GROUP BY 
  problema.nombre_problema, 
@@ -110,8 +186,8 @@ GROUP BY
   order by count(*) desc;
    ";
   $result=  pg_query($sql);
-  $cantidad=pg_num_rows($result);
-  return $cantidad;
+  $res=  pg_fetch_array($result);
+  return $res['count'];
 }
 ?>
 

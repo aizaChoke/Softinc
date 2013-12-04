@@ -1,6 +1,6 @@
 <body>
 <div align="center">
-    <h1 align="center">Ranking de los mejores </h1>
+    <h1 align="center">Ranking  de los 5 mejores olimpista</h1>
   <?php
   
 include '../Modelo/cnx.php';
@@ -16,7 +16,7 @@ $numeroResueltoPorOlimpista=array();
 
 while($dato= pg_fetch_array($listaOlimpistaUsuario))
 {
-     if($i<5)
+     if(sacarPromedio($dato['user_usuario'])> 50)
      {
      $nombre[]=$dato['nombre_usuario'];
      $apellido[]=$dato['apellido_usuario'];
@@ -36,6 +36,8 @@ echo "<tr><td>Posicion olimpista</td><td>Nombre</td><td>Apellido</td><td>Calific
     foreach ($promedio as $key => $val) 
     {
         
+        if($pos<=5)
+        {
        echo "<tr>";
         echo "<td>$pos</td>";
         echo "<td>$nombre[$key]</td>";
@@ -46,7 +48,7 @@ echo "<tr><td>Posicion olimpista</td><td>Nombre</td><td>Apellido</td><td>Calific
        echo "</tr>";
 //echo "*$key = $val*\n";
     $pos++;
-    
+        }
     }
 
 echo "</table>";

@@ -10,15 +10,13 @@
     </head>
     <body>
         <h2>SELECCIONE LA COMPETENCIA QUE DESEA MODIFICAR</h2>
-        <div id="formulario">
-        <form action="../controlador/Equipo.php" method="POST">
+        <form action="../controlador/Competencia.php" method="POST">
         <?php 
         include '../modelo/ConsultaCompetencia.php';
         $competencia=new ConsultaCompetencia();
         echo $competencia->CompetenciaComite();
         ?>
         </form>
-        </div>
       
     </body>
 </html>

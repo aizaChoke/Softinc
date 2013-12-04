@@ -484,18 +484,22 @@ function fechas(){
     }
         
     if( (Date.parse(fecha_final) == Date.parse(fecha_inicio)) ){
-        if(Date.parse(fecha_final) >= Date.parse( f.getFullYear() + "-" + (f.getMonth() +1) + "-" + formato(f.getDate()))){
+        if(Date.parse(fecha_final) == Date.parse( f.getFullYear() + "-" + (f.getMonth() +1) + "-" + formato(f.getDate()))){
             if ((hh1<hh2 || (hh1==hh2 && mm1<mm2)) && (hh1>f.getHours())){
                valido=true;
              }
             else{
-                alert(f.getHours()+"jgjhgjg"+f.getMinutes()+ mm1+ hh1);
                 alert("Por favor verifique las Horas");
                 valido=false;
             }
-        }else{
-                alert("Por favor verifique las fechas");
+        }else if(Date.parse(fecha_final) > Date.parse( f.getFullYear() + "-" + (f.getMonth() +1) + "-" + formato(f.getDate()))){
+            if (hh1<hh2 || (hh1==hh2 && mm1<mm2)){
+               valido=true;
+             }
+            else{
+                alert("Por favor verifique las Horas");
                 valido=false;
+            }
         }
     }
         

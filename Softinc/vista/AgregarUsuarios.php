@@ -12,7 +12,7 @@
                 <?php 
                     require '../modelo/ConsultaEquipo.php';
                     $consul     =   new ConsultaEquipo();
-                    echo    $consul->generarEquiposAgregar();
+                    echo    $consul->generarEquiposModificar();
                 ?>
         </form>
         </div>

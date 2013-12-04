@@ -47,9 +47,9 @@ require '../vista/ContenidoCompetencia.php';
 
 if(isset($_POST['siguiente_problema'])){
     require '../modelo/ConsultaCompetencia.php';
-    $consul=new ConsultaCompetencia();
-    $id_competencia=$_POST['idCompetencia'];
-    $nombre_competencia=$_POST['nombre_competencia'];
+    $consul             =new ConsultaCompetencia();
+    $id_competencia     =$_POST['idCompetencia'];
+    $nombre_competencia =$_POST['nombre_competencia'];
     require '../vista/EquiposCompetencia.php';
 }
 
@@ -61,11 +61,19 @@ if(isset($_POST['crear_equipo'])){ //creacion de un equipo
     require '../modelo/Equipo.php';
     require '../modelo/ConsultaEquipo.php';
     $nombreEquipo=$_POST['nombre_equipo'];
-    
+     require '../Modelo/verificarEquipoExiste.php';
+     $extraer=new verificarEquipoExiste();
+     
+    $existe=$extraer->existe($nombreEquipo);
+    if($existe==true )
+    {
     $equipo=new Equipo();
     $equipo->crearEquipo($nombreEquipo);
     $consulta=new ConsultaEquipo();
     require '../vista/OlimpistaEquipo.php';
+    }else{
+        header("Location: ../vista/CrearEquipo");
+    }
 }
 
 
@@ -121,39 +129,31 @@ if(isset($_POST['inscribir_equipos'])){
     require '../vista/EquiposCompetencia.php';
 }
 
-if(isset($_POST['agregar_usuarios_competencia'])){
-    $arrayIDEquipos=$_POST['equipos'];
-    require '../modelo/ConsultaCompetencia.php';
-    $consul=new ConsultaCompetencia();
-    $arrayIDUsuarios=array();
-    $id_competencia=$_POST['idCompetencia'];
-    $nombre_competencia=$_POST['nombre_competencia'];
-    session_start();
-    $usuario=$_SESSION["id_usuario"];
-    for($i=0;   $i<count($arrayIDEquipos);    $i++){
-                $seleccionar=   'SELECT id_equipo_usuario, id_equipo, id_usuario
-                                 FROM equipo_usuario
-                                 where id_equipo='.$arrayIDEquipos[$i];
-        
-                $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
-                $columnas   = pg_numrows($result);
 
-                for($i=0;$i<=$columnas-1; $i++){
-                    $line = pg_fetch_array($result, null, PGSQL_ASSOC);
-                    $arrayIDUsuarios=$line['id_usuario'];      
-                }  
-    }
-    $insertar= "INSERT INTO competencia_usuario(id_usuario, id_competencia)
-                                        VALUES ($usuario, '$id_competencia');";
-    $result = pg_query($cnx, $insertar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
+
+
+if(isset($_POST['agregar_usuarios_competencia'])){ //agregar usuarios a una competencia
+    $arrayIDEquipos     =$_POST['equipos'];
+    session_start();
+    require '../modelo/ConsultaCompetencia.php';
+    $consul             =new ConsultaCompetencia();
+    $arrayIDUsuarios    =array();
+    $id_competencia     =$_POST['idCompetencia'];
+    $nombre_competencia =$_POST['nombre_competencia'];
+    $usuario            =$_SESSION["id_usuario"];
     
-    for($i=0; $i<count($arrayIDUsuarios); $i++){
-    $insertar= "INSERT INTO competencia_usuario(id_usuario, id_competencia)
-                                        VALUES ('$arrayIDUsuarios[$i]', '$id_competencia');";
+    for($i=0; $i<count($arrayIDEquipos); $i++){
+    $insertar= "INSERT INTO competencia_equipo(id_equipo, id_competencia)
+                                        VALUES('$arrayIDEquipos[$i]', '$id_competencia');";
     $result = pg_query($cnx, $insertar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
     }
     require '../vista/EquiposCompetencia.php';
 }
+
+
+
+
+
 
 
 if(isset($_POST['agregar_usuario'])){
@@ -204,15 +204,10 @@ if(isset($_POST['eliminar_usuario'])){
 
 
 //modificar competencia
-if(isset($_POST['add_problema'])){
-    
-    $id_competencia     =  $_POST['add_problema'];
-    $contenedor         =  array();
-    $contenedor         =  explode("_", $id_competencia);
-    $id_competencia     =  $contenedor[1];
-    $nombre_competencia =  $contenedor[2];
-    require '../vista/ContenidoCompetencia.php';
-}
+
+
+
+
 
 if(isset($_POST['verUsuarios'])){// ver usuarios de un equipo
     include '../modelo/ConsultaEquipo.php';

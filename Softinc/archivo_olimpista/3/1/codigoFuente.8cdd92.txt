@@ -1,0 +1,96 @@
+import java.util.*;
+/**
+ * Write a description of class Main here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class Main
+{
+ public static void main(String []args)
+ {
+      
+     Scanner lector=new Scanner(System.in);
+     
+     int num=lector.nextInt();
+     int []cadena2 ;
+     for(int i=0 ;i< num ; i++)
+     {
+        
+         String cadena=lector.next();
+        if( cadena.charAt(1) == '1')
+       {
+           if(cadena.charAt(cadena.length()-1)=='#')
+           {
+             if(verificarNun(cadena)==true)
+             {
+              String cadena1= quitarNumeral(cadena);
+              //System.out.println(cadena1);
+              cadena2 =arreglo(cadena1);
+               int n1=cadena2[0];
+               int n2=cadena2[1];
+               if(n1 < n2)
+               {
+                System.out.println("bien");
+                }else{
+                  System.out.println("mal");
+                }
+              }else{
+                    System.out.println("mal");
+                }
+            }else{
+                   System.out.println("mal");
+                 }
+        }else{
+          System.out.println("mal");
+        }
+        
+     }
+ }
+ 
+ public static  boolean verificarNun(String cadena)
+ {
+     boolean res=true;
+    for(int i=0; i < cadena.length() ; i++ )
+    {
+        if(cadena.charAt(i) == '1' || cadena.charAt(i) == '2' || cadena.charAt(i) == '3' || cadena.charAt(i) == '4' || cadena.charAt(i) == '5' ||  cadena.charAt(i) == '6' || cadena.charAt(i) == '7' || cadena.charAt(i) == '8' || cadena.charAt(i) == '9' || cadena.charAt(i) == '0' || cadena.charAt(i) == '*' ||cadena.charAt(i) == '#' )
+        {
+          res =true;
+        }else{
+          res=false;
+          i=cadena.length()+1;
+        }
+    }
+    return res;
+ }
+ 
+ public static String quitarNumeral(String cadena)
+ {
+     String res="";
+    for(int i=1; i< cadena.length()-1 ; i++)
+    {
+        res=res+cadena.charAt(i);
+    }
+    return res;
+ }
+ 
+ public static int[] arreglo(String cadena)
+ {
+     int [] res=new int[2];
+     String sumaCadena="";
+     int j=0;
+    for(int i=0 ; i < cadena.length() ; i++)
+    {
+        if(cadena.charAt(i)=='*')
+        {
+            res[j]=Integer.parseInt(sumaCadena);
+            sumaCadena="";
+            j++;
+        }else{
+        sumaCadena=sumaCadena+cadena.charAt(i);
+       }
+    }
+    return res;
+ }
+ 
+}

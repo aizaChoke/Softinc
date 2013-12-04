@@ -1,11 +1,18 @@
 
  <?php
  require '../modelo/cnx.php';
+  require '../Modelo/verificarProblemaExiste.php';
+ $extraer=new verificarProblemaExiste();
+ 
  if(isset($_POST['crear'])){
     require '../modelo/CreadorArchivos.php';
     $archivo=$_FILES['enunciado']['name'];
     $nombreProblema=$_REQUEST['nombre'];
     $servidor=$_FILES['enunciado']['tmp_name'];
+	$existe=$extraer->existe($nombreProblema);
+	
+	if($existe==true )
+    {
     $creador=new CreadorArchivos();
     $mensaje=$creador->subir($archivo, $servidor, $nombreProblema);
     
@@ -21,7 +28,12 @@
             $id_problema=$line['id_problema'];
     }
     require '../vista/AgregarArchivos.php';
+ }else{
+    header("Location: ../vista/CreacionProblema.php");
+   
+     }
  }
+ 
  
  
  if(isset($_POST['agregar'])){ //agregar datos de entrada y salida

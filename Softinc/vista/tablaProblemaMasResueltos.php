@@ -3,7 +3,7 @@
 	<title></title>
 </head>
 <body>
-<h1 align="center">Ranking de los problemas <br> sin errores compilacion  </h1>
+<h1 align="center">Ranking de los problemas <br> mas veces resueltos, que obtuvieron 100  </h1>
 <div align="center">
   <?php
 include '../Modelo/cnx.php';

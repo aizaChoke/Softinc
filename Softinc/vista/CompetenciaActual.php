@@ -29,7 +29,6 @@ function realizaProceso(id_competencia){
 </script>
     </head>
     <body>
-        <div id="formulario">
         <h2>COMPETENCIAS EN SERVICIO</h2>
         <div id="tabla">
         <?php 
@@ -44,7 +43,6 @@ function realizaProceso(id_competencia){
             
             
 
-        </div>
         </div>
     </body>
 </html>

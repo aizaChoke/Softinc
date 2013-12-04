@@ -16,7 +16,7 @@
 <body>
 
 <br><center>
-<h1 align="center">Presentar solucion </h1>
+<h1 align="center">Presentar solucion entrenamiento</h1>
 <div class="container">
 		
 <div class="form-bg">
@@ -29,7 +29,7 @@
 </tr>
     <td>Numero competencia:</td>
 </tr>
- <?php echo "<tr><td><input type='hidden' id='idCompetencia' name='idCompetencia' size='40' value='0' maxlength='40' placeholder='codigo problema'  required OnFocus='this.blur()' /></td></tr>" ?>; 
+ <?php echo "<tr><td><input type='hidden' id='idCompetencia' name='idCompetencia' size='40' value='0' maxlength='40' placeholder='codigo problema'  required OnFocus='this.blur()' /></td></tr>"; ?> 
 <tr>
 <tr> 
 	<td>

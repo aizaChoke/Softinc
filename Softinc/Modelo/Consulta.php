@@ -67,7 +67,7 @@ class Consulta {
         }
     
     
-function generarTablaEliminarProblema(){
+function generarTablaEliminarProblema(){ //eliminar problema del banco de preguntas
         include("../modelo/cnx.php");
         session_start();
         $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
@@ -82,7 +82,7 @@ function generarTablaEliminarProblema(){
         $this->formu.='<tr>';
         $this->formu.='<td>CODIGO DE PROBLEMA</td>';
         $this->formu.='<td>NOMBRE</td>';
-        $this->formu.='<td>ELIMINAR</td>';
+        $this->formu.='<td>SELECCIONE EL PROBLEMA</td>';
         $this->formu.='</tr>';
         for($i=0;$i<=$columnas-1; $i++){
             $line = pg_fetch_array($result, null, PGSQL_ASSOC);
@@ -211,6 +211,7 @@ function generarTablaEliminarProblema(){
         $this->formu.='<table>';
         $this->formu.='<tr><td><h4>Identificador</h4></td>';
         $this->formu.='<td><h4>Nombre problema</h4></td>';
+        $this->formu.='<td><h4>Seleccione el problema</h4></td>';
         $this->formu.='</tr>';
         for($i=0;$i<=$columnas-1; $i++){
             $line = pg_fetch_array($result, null, PGSQL_ASSOC);

@@ -144,7 +144,7 @@ class ConsultaEquipo {
     
     
     
-       function generarEquiposAgregar(){ //sirve para añadir mas usuarios a un equipo determinado
+       function generarEquiposModificar(){ //sirve para añadir mas usuarios a un equipo determinado
         
         include("../modelo/cnx.php");
         session_start();
@@ -157,6 +157,9 @@ class ConsultaEquipo {
         $this->formu.='<table>';
         $this->formu.='<tr><td><h4>Identificador</h4></td>';
         $this->formu.='<td><h4>Nombre de Equipo</h4></td>';
+        $this->formu.='<td><h4>Agregar</h4></td>';
+        $this->formu.='<td><h4>Eliminar</h4></td>';
+        $this->formu.='<td><h4>Ver</h4></td>';
         $this->formu.='</tr>';
         for($i=0;$i<=$columnas-1; $i++){
             $line = pg_fetch_array($result, null, PGSQL_ASSOC);
@@ -203,7 +206,7 @@ class ConsultaEquipo {
     
     
     
-        function generarTablaUsuariosEquipos(){   
+        function generarTablaUsuariosEquipos(){   // visualiza usuarios de equipos
         include("cnx.php");
         $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
 
@@ -245,20 +248,16 @@ class ConsultaEquipo {
         
     } 
     
-    
-    
-    
+        
     
         function ListaEquiposDeCompetencia($id_competencia){ // genera una lista de equipo que pertenecen a una competencia   
         include("cnx.php");
         $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
 
-        $seleccionar='SELECT  equipo.id_equipo, nombre_equipo
-                        FROM  competencia_usuario, usuario, equipo_usuario, equipo
-                        where usuario.id_usuario=competencia_usuario.id_usuario and
-                        equipo_usuario.id_usuario=usuario.id_usuario	and
-                        equipo.id_equipo=equipo_usuario.id_equipo and competencia_usuario.id_competencia='.$id_competencia.'
-                        GROUP BY nombre_equipo, equipo.id_equipo';
+        $seleccionar='SELECT id_competencia_equipo, equipo.id_equipo, id_competencia, nombre_equipo
+                        FROM competencia_equipo, equipo
+                        where equipo.id_equipo=competencia_equipo.id_equipo
+                        and competencia_equipo.id_competencia='.$id_competencia.'';
         
         $result     = pg_query($seleccionar) or die('ERROR AL INSERTAR DATOS: ' . pg_last_error());
         $columnas   = pg_numrows($result);
@@ -287,7 +286,7 @@ class ConsultaEquipo {
     
     
     
-            function ListaUsuariosDeEquipos($id_equipo){ // genera una lista de usuarios que pertenecen a un equipo   
+        function ListaUsuariosDeEquipos($id_equipo){ // genera una lista de usuarios que pertenecen a un equipo   
         include("cnx.php");
         $cnx = pg_connect($entrada) or die ("Error de conexion. ". pg_last_error());
 

@@ -26,7 +26,7 @@ $problemaCo=$dato->problemaCompetencia($idCompetencia);
 <body>
 
 <br><center>
-<h1 align="center">Presentar solucion </h1>
+<h1 align="center">Presentar solucion competencia </h1>
 <div class="container">
 		
 <div class="form-bg">
